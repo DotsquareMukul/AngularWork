@@ -1,0 +1,12 @@
+<div class="list-header">
+  <h2>Orders</h2>
+  <button class="add-btn" (click)="goToAddOrder()">+ Create Order</button>
+</div>
+
+<app-data-table
+  [columns]="columns"
+  [data]="orders"
+  [actions]="actions"
+  [pageSize]="5"
+  (actionClick)="onAction($event)"
+></app-data-table>

@@ -1,0 +1,18 @@
+<div class="app-shell">
+  <header class="header">
+    <h1>{{ title }}</h1>
+  </header>
+
+  <div class="body">
+    <aside class="sidebar">
+      <nav>
+        <a routerLink="/customer-list" routerLinkActive="active">Customers</a>
+        <a routerLink="/order-list" routerLinkActive="active">orders</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

@@ -1,3 +1,21 @@
 import { Routes } from '@angular/router';
+import { Layout } from './layout/layout';
+import { CustomerListComponent } from './customer-list/customer-list';
+import { CustomerFormComponent } from './customer-form/customer-form';
+import { OrderListComponent } from './order-list/order-list';
+import { OrderFormComponent } from './order-form/order-form';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+  {
+    path: '',
+    component: Layout,
+    children: [
+      { path: 'customer-form', component: CustomerFormComponent },
+      { path: 'customer-list', component: CustomerListComponent },
+      { path: '', redirectTo: 'customer-list', pathMatch: 'full' },
+      { path: 'order-list', component: OrderListComponent },
+      { path: 'order-form', component: OrderFormComponent },
+      { path: 'order-form/:id', component: OrderFormComponent },
+    ],
+  },
+];

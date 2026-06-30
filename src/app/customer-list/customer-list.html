@@ -1,0 +1,20 @@
+<div class="list-header">
+  <h2>Customers</h2>
+  <button class="add-btn" (click)="goToAddCustomer()">+ Add Customer</button>
+</div>
+<div class="search-bar">
+  <input
+    type="text"
+    placeholder="Search customers..."
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="applyFilter()"
+  />
+</div>
+
+<app-data-table
+  [columns]="columns"
+  [data]="filteredCustomers"
+  [actions]="actions"
+  [pageSize]="5"
+  (actionClick)="onAction($event)"
+></app-data-table>

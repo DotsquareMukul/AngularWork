@@ -1,0 +1,79 @@
+<div class="form-header">
+  <button type="button" class="back-btn" (click)="goBack()">← Back</button>
+  <h2>{{ isEditMode ? 'Edit Order' : 'Create Order' }}</h2>
+</div>
+
+<form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="customerName">Customer Name</label>
+    <select id="customerName" formControlName="customerName">
+      <option value="" disabled>Select customer</option>
+      <option *ngFor="let c of customers" [value]="c.firstName + ' ' + c.lastName">
+        {{ c.firstName }} {{ c.lastName }}
+      </option>
+    </select>
+    <div *ngIf="f['customerName'].invalid && f['customerName'].touched">
+      <small>Customer name is required.</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="status">Status</label>
+    <select id="status" formControlName="status">
+      <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+    </select>
+  </div>
+
+  <div class="items-section">
+    <div class="items-header">
+      <label>Products</label>
+      <button type="button" class="add-item-btn" (click)="addItem()">+ Add Product</button>
+    </div>
+
+    <div formArrayName="items" class="items-list">
+      <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="item-row">
+        <select formControlName="productId" class="product-select">
+          <option value="" disabled>Select product</option>
+          <option *ngFor="let p of products" [value]="p.id">{{ p.name }} (₹{{ p.price }})</option>
+        </select>
+
+        <input
+          type="number"
+          formControlName="quantity"
+          min="1"
+          class="qty-input"
+          placeholder="Qty"
+        />
+
+        <span class="line-price">₹{{ getProductPrice(item.value.productId) }}</span>
+        <span class="line-total">₹{{ getLineTotal(i) }}</span>
+
+        <button
+          type="button"
+          class="remove-item-btn"
+          (click)="removeItem(i)"
+          [disabled]="items.length === 1"
+        >
+          ✕
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="totals-section">
+    <div class="totals-row">
+      <span>Subtotal</span>
+      <span>₹{{ subtotal.toFixed(2) }}</span>
+    </div>
+    <div class="totals-row">
+      <span>Tax (18%)</span>
+      <span>₹{{ taxAmount.toFixed(2) }}</span>
+    </div>
+    <div class="totals-row grand-total">
+      <span>Grand Total</span>
+      <span>₹{{ grandTotal.toFixed(2) }}</span>
+    </div>
+  </div>
+
+  <button type="submit" class="submit-btn">{{ isEditMode ? 'Edit Order' : 'Create Order' }}</button>
+</form>

@@ -1,0 +1,41 @@
+<table class="data-table">
+  <thead>
+    <tr>
+      <th *ngFor="let col of columns" (click)="sort(col)" [class.sortable]="col.sortable">
+        {{ col.label }}
+        <span *ngIf="col.sortable && sortKey === col.key">
+          {{ sortDirection === 'asc' ? '▲' : '▼' }}
+        </span>
+      </th>
+      <th *ngIf="actions.length">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let row of pagedData">
+      <td *ngFor="let col of columns">{{ row[col.key] }}</td>
+      <td *ngIf="actions.length" class="actions-cell">
+        <button
+          *ngFor="let action of actions"
+          (click)="onAction(action.type, row)"
+          class="action-btn"
+          [class]="action.type"
+        >
+          {{ action.label }}
+        </button>
+      </td>
+    </tr>
+
+    <tr *ngIf="pagedData.length === 0">
+      <td [attr.colspan]="columns.length + (actions.length ? 1 : 0)" class="empty-row">
+        No data available.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="pagination" *ngIf="totalPages > 1">
+  <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">Prev</button>
+  <span>Page {{ currentPage }} of {{ totalPages }}</span>
+  <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+</div>

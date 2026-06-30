@@ -1,0 +1,62 @@
+<div class="form-header">
+  <button type="button" class="back-btn" (click)="goBack()">← Back</button>
+  <h2>Create Customer</h2>
+</div>
+<form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="firstName">First Name</label>
+    <input id="firstName" formControlName="firstName" />
+    <div *ngIf="f['firstName'].invalid && f['firstName'].touched">
+      <small *ngIf="f['firstName'].errors?.['required']">First name is required.</small>
+      <small *ngIf="f['firstName'].errors?.['minlength']">Minimum 2 characters.</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="lastName">Last Name</label>
+    <input id="lastName" formControlName="lastName" />
+    <div *ngIf="f['lastName'].invalid && f['lastName'].touched">
+      <small>Last name is required.</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="email">Email</label>
+    <input id="email" type="email" formControlName="email" />
+    <div *ngIf="f['email'].invalid && f['email'].touched">
+      <small *ngIf="f['email'].errors?.['required']">Email is required.</small>
+      <small *ngIf="f['email'].errors?.['email']">Enter a valid email.</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="phone">Phone</label>
+    <input id="phone" formControlName="phone" />
+    <div *ngIf="f['phone'].invalid && f['phone'].touched">
+      <small>Enter a valid 10-digit phone number.</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="address">Address</label>
+    <input id="address" formControlName="address" />
+  </div>
+
+  <div>
+    <label for="city">City</label>
+    <input id="city" formControlName="city" />
+    <div *ngIf="f['city'].invalid && f['city'].touched">
+      <small>City is required.</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="zip">ZIP Code</label>
+    <input id="zip" formControlName="zip" />
+    <div *ngIf="f['zip'].invalid && f['zip'].touched">
+      <small>Enter a valid 6-digit ZIP code.</small>
+    </div>
+  </div>
+
+  <button type="submit">Submit</button>
+</form>
