@@ -10,13 +10,14 @@ export interface OrderLineItem {
 }
 
 export interface Order {
-  id: number;
+  id: string;
+  customerId?: string;
   customerName: string;
   status: string;
   items: OrderLineItem[];
   subtotal: number;
   tax: number;
-  grandTotal: number;
+  total: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -27,22 +28,22 @@ export class OrderService {
   getOrders() {
     return this.orders$.asObservable();
   }
-  updateOrder(id: number, updated: Omit<Order, 'id'>) {
+  updateOrder(id: string, updated: Omit<Order, 'id'>) {
     this.orders = this.orders.map((o) => (o.id === id ? { ...updated, id } : o));
     this.orders$.next(this.orders);
   }
 
-  getOrderById(id: number): Order | undefined {
+  getOrderById(id: string): Order | undefined {
     return this.orders.find((o) => o.id === id);
   }
 
   addOrder(order: Omit<Order, 'id'>) {
-    const newOrder: Order = { ...order, id: Date.now() };
+    const newOrder: Order = { ...order, id: String(Date.now()) };
     this.orders = [...this.orders, newOrder];
     this.orders$.next(this.orders);
   }
 
-  deleteOrder(id: number) {
+  deleteOrder(id: string) {
     this.orders = this.orders.filter((o) => o.id !== id);
     this.orders$.next(this.orders);
   }

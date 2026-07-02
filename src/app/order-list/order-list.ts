@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DataTable, TableAction, TableColumn } from '../../shared/data-table/data-table';
-import { Order, OrderService } from '../service/order';
+import { Order } from '../service/order';
+import { AppStore } from '../app.store';
 
 @Component({
   selector: 'app-order-list',
@@ -12,36 +13,39 @@ import { Order, OrderService } from '../service/order';
   styleUrls: ['./order-list.css'],
 })
 export class OrderListComponent implements OnInit {
-  orders: Order[] = [];
-
   columns: TableColumn[] = [
     { key: 'customerName', label: 'Customer', sortable: true },
     { key: 'status', label: 'Status', sortable: true },
     { key: 'subtotal', label: 'Subtotal' },
     { key: 'tax', label: 'Tax' },
-    { key: 'grandTotal', label: 'Grand Total', sortable: true },
+    { key: 'total', label: 'Grand Total', sortable: true },
   ];
 
   actions: TableAction[] = [
     { label: 'Delete', type: 'delete' },
-    { label: 'view', type: 'view' },
     { label: 'Edit', type: 'edit' },
   ];
 
   constructor(
-    private orderService: OrderService,
     private router: Router,
+    private store: AppStore,
   ) {}
 
   ngOnInit() {
-    this.orderService.getOrders().subscribe((data) => {
-      this.orders = data;
-    });
+    this.store.loadOrders();
+  }
+
+  get orders(): Order[] {
+    return this.store.orders();
+  }
+
+  get loading(): boolean {
+    return this.store.loadingOrders();
   }
 
   onAction(event: { type: string; row: Order }) {
     if (event.type === 'delete') {
-      this.orderService.deleteOrder(event.row.id);
+      this.store.deleteOrder(event.row.id);
     } else if (event.type === 'edit') {
       this.router.navigate(['/order-form', event.row.id]);
     }

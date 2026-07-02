@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { Customer, CustomerService } from '../service/cutomer';
-import { DataTable, TableAction, TableColumn } from '../../shared/data-table/data-table';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AppStore } from '../app.store';
+import { Customer } from '../service/cutomer';
+import { DataTable, TableAction, TableColumn } from '../../shared/data-table/data-table';
 
 @Component({
   selector: 'app-customer-list',
-  imports: [CommonModule, DataTable, FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, DataTable],
   templateUrl: './customer-list.html',
   styleUrls: ['./customer-list.css'],
 })
 export class CustomerListComponent implements OnInit {
-  customers: Customer[] = [];
   filteredCustomers: Customer[] = [];
   searchTerm = '';
 
@@ -27,37 +28,43 @@ export class CustomerListComponent implements OnInit {
   actions: TableAction[] = [{ label: 'Delete', type: 'delete' }];
 
   constructor(
-    private customerService: CustomerService,
+    private store: AppStore,
     private router: Router,
-  ) {}
-
-  ngOnInit() {
-    this.customerService.getCustomers().subscribe((data) => {
-      this.customers = data;
+  ) {
+    effect(() => {
       this.applyFilter();
     });
   }
 
-  onAction(event: { type: string; row: Customer }) {
-    if (event.type === 'delete') {
-      this.customerService.deleteCustomer(event.row.id);
-    }
+  ngOnInit() {
+    this.store.loadCustomers();
+  }
+
+  get loading(): boolean {
+    return this.store.loadingCustomers();
+  }
+  get customers(): Customer[] {
+    return this.store.customers();
   }
   applyFilter() {
     const term = this.searchTerm.trim().toLowerCase();
-    console.log(term);
-
     if (!term) {
-      this.filteredCustomers = this.customers;
+      this.filteredCustomers = this.store.customers();
+      console.log(this.store.customers());
       return;
     }
-
-    this.filteredCustomers = this.customers.filter((customer) =>
+    this.filteredCustomers = this.store.customers().filter((customer) =>
       this.columns.some((col) => {
         const value = (customer as any)[col.key];
         return value && value.toString().toLowerCase().includes(term);
       }),
     );
+  }
+
+  onAction(event: { type: string; row: Customer }) {
+    if (event.type === 'delete') {
+      this.store.deleteCustomer(event.row.id);
+    }
   }
 
   goToAddCustomer() {

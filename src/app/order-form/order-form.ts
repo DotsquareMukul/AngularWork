@@ -2,53 +2,69 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Product, PRODUCTS, TAX_RATE } from '../../utils/MockData';
-import { OrderService } from '../service/order';
-import { Customer, CustomerService } from '../service/cutomer';
+import { AppStore } from '../app.store';
 
 @Component({
   selector: 'app-order-form',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './order-form.html',
   styleUrls: ['./order-form.css'],
 })
 export class OrderFormComponent implements OnInit {
   orderForm!: FormGroup;
-  products: Product[] = PRODUCTS;
-  taxRate = TAX_RATE;
-  customers: Customer[] = [];
+  taxRate: number;
 
-  statusOptions = ['Pending', 'Processing', 'Completed', 'Cancelled'];
+  statusOptions = ['pending', 'processing', 'completed', 'cancelled'];
   isEditMode = false;
-  orderId: number | null = null;
+  orderId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private orderService: OrderService,
+    private store: AppStore,
     private router: Router,
     private route: ActivatedRoute,
-    private customerService: CustomerService,
-  ) {}
+  ) {
+    this.taxRate = this.store.taxRate;
+  }
+
+  // reads live from the store's signals — no local copies to go stale
+  get customers() {
+    return this.store.customers();
+  }
+
+  get products() {
+    return this.store.products();
+  }
+
+  get isLoading(): boolean {
+    return this.store.loadingCustomers();
+  }
 
   ngOnInit() {
-    this.customerService.getCustomers().subscribe((data) => {
-      this.customers = data;
-    });
+    this.store.loadCustomers();
+    this.store.loadProducts();
+
     this.orderForm = this.fb.group({
-      customerName: ['', Validators.required],
+      customerId: ['', Validators.required],
       status: ['Pending', Validators.required],
       items: this.fb.array([this.createItem()]),
     });
+
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.isEditMode = true;
-      this.orderId = +idParam;
+      this.orderId = idParam;
+      console.log(idParam);
       this.loadOrderForEdit(this.orderId);
     }
   }
 
-  loadOrderForEdit(id: number) {
-    const order = this.orderService.getOrderById(id);
+  loadOrderForEdit(id: string) {
+    console.log(id, 'form');
+    const order = this.store.getOrderById(id);
+    console.log(order, 'edit order');
+    console.log(order);
     if (!order) {
       this.router.navigate(['/order-list']);
       return;
@@ -67,6 +83,7 @@ export class OrderFormComponent implements OnInit {
     this.orderForm.patchValue({
       customerName: order.customerName,
       status: order.status,
+      customerId: order.customerId,
     });
   }
 
@@ -125,31 +142,34 @@ export class OrderFormComponent implements OnInit {
     }
 
     const formValue = this.orderForm.value;
-
+    const selectedCustomer = this.customers.find((c) => c.id === formValue.customerId);
     const lineItems = formValue.items.map((item: any) => {
       const product = this.products.find((p) => p.id === +item.productId);
       return {
         productId: +item.productId,
         productName: product ? product.name : '',
-        price: product ? product.price : 0,
+        unitPrice: product ? product.price : 0,
         quantity: item.quantity,
         total: (product ? product.price : 0) * item.quantity,
       };
     });
 
     const orderPayload = {
-      customerName: formValue.customerName,
+      customerId: formValue.customerId,
+      customerName: selectedCustomer
+        ? `${selectedCustomer.firstName} ${selectedCustomer.lastName}`
+        : '',
       status: formValue.status,
       items: lineItems,
       subtotal: this.subtotal,
       tax: this.taxAmount,
-      grandTotal: this.grandTotal,
+      total: this.grandTotal,
     };
 
     if (this.isEditMode && this.orderId !== null) {
-      this.orderService.updateOrder(this.orderId, orderPayload);
+      this.store.updateOrder(this.orderId, orderPayload);
     } else {
-      this.orderService.addOrder(orderPayload);
+      this.store.addOrder(orderPayload);
     }
 
     this.router.navigate(['/order-list']);

@@ -1,13 +1,16 @@
 <div class="app-shell">
   <header class="header">
-    <h1>{{ title }}</h1>
+    <h1>{{ title() }}</h1>
+    <span>Customers: {{ customersCount }}</span>
+    <span>Orders: {{ ordersCount }}</span>
+    <span>Total Revenue: ₹{{ revenue }}</span>
   </header>
 
   <div class="body">
     <aside class="sidebar">
       <nav>
         <a routerLink="/customer-list" routerLinkActive="active">Customers</a>
-        <a routerLink="/order-list" routerLinkActive="active">orders</a>
+        <a routerLink="/order-list" routerLinkActive="active">Orders</a>
       </nav>
     </aside>
 

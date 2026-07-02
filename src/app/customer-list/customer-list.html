@@ -16,5 +16,6 @@
   [data]="filteredCustomers"
   [actions]="actions"
   [pageSize]="5"
+  *ngIf="!loading"
   (actionClick)="onAction($event)"
 ></app-data-table>

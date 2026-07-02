@@ -5,14 +5,12 @@
 
 <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
   <div>
-    <label for="customerName">Customer Name</label>
-    <select id="customerName" formControlName="customerName">
+    <label for="customerId">Customer Name</label>
+    <select id="customerId" formControlName="customerId">
       <option value="" disabled>Select customer</option>
-      <option *ngFor="let c of customers" [value]="c.firstName + ' ' + c.lastName">
-        {{ c.firstName }} {{ c.lastName }}
-      </option>
+      <option *ngFor="let c of customers" [value]="c.id">{{ c.firstName }} {{ c.lastName }}</option>
     </select>
-    <div *ngIf="f['customerName'].invalid && f['customerName'].touched">
+    <div *ngIf="f['customerId'].invalid && f['customerId'].touched">
       <small>Customer name is required.</small>
     </div>
   </div>

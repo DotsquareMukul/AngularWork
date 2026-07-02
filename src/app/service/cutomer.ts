@@ -7,14 +7,13 @@ import { BehaviorSubject } from 'rxjs';
 import { customersData } from '../../utils/MockData';
 
 export interface Customer {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
   address: string;
   city: string;
-  zip: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -28,12 +27,12 @@ export class CustomerService {
   }
 
   addCustomer(customer: Omit<Customer, 'id'>) {
-    const newCustomer: Customer = { ...customer, id: Date.now() };
+    const newCustomer: Customer = { ...customer, id: String(Date.now().toString) };
     this.customers = [...this.customers, newCustomer];
     this.customers$.next(this.customers);
   }
 
-  deleteCustomer(id: number) {
+  deleteCustomer(id: string) {
     this.customers = this.customers.filter((c) => c.id !== id);
     this.customers$.next(this.customers);
   }
