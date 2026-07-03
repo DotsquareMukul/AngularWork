@@ -1,0 +1,59 @@
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.detail-header h2 {
+  margin: 0;
+  font-size: 22px;
+  color: #1f2937;
+}
+
+.info-card,
+.items-card,
+.totals-card {
+  margin-bottom: 16px;
+}
+.content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  gap: 12px;
+}
+
+.label {
+  font-weight: 600;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.value {
+  font-size: 15px;
+  color: #1f2937;
+}
+
+.items-table {
+  width: 100%;
+}
+
+.totals-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.totals-row.grand-total {
+  font-size: 17px;
+  font-weight: 700;
+  color: #020303;
+  padding-top: 12px;
+}

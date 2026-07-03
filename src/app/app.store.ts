@@ -24,7 +24,6 @@ export class AppStore {
 
   private readonly baseUrl = 'http://localhost:5001/api'; // swap for your real API later
 
-  // ---------- STATE ----------
   customers = signal<Customer[]>([]);
   orders = signal<Order[]>([]);
   products = signal<Product[]>([]);
@@ -68,8 +67,6 @@ export class AppStore {
   }
 
   getCustomerById(id: string): Customer | undefined {
-    console.log(id, 'sdff');
-
     return this.customers().find((c) => c.id === id);
   }
 
@@ -143,7 +140,7 @@ export class AppStore {
   }
 
   updateOrder(id: string, updated: Omit<Order, 'id'>) {
-    this.http.put<any>(`${this.baseUrl}/order/${id}`, updated).subscribe({
+    this.http.patch<any>(`${this.baseUrl}/orders/${id}`, updated).subscribe({
       next: () => {
         this.orders.update((list) => list.map((o) => (o.id === id ? { ...updated, id } : o)));
       },

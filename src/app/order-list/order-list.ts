@@ -24,6 +24,7 @@ export class OrderListComponent implements OnInit {
   actions: TableAction[] = [
     { label: 'Delete', type: 'delete' },
     { label: 'Edit', type: 'edit' },
+    { label: 'view', type: 'view' },
   ];
 
   constructor(
@@ -48,6 +49,8 @@ export class OrderListComponent implements OnInit {
       this.store.deleteOrder(event.row.id);
     } else if (event.type === 'edit') {
       this.router.navigate(['/order-form', event.row.id]);
+    } else if (event.type === 'view') {
+      this.router.navigate(['/order-detail', event.row.id]);
     }
   }
 

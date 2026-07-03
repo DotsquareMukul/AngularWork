@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { CustomerService } from '../service/cutomer';
 import { AppStore } from '../app.store';
 
 @Component({
