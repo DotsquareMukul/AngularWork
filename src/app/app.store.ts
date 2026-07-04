@@ -1,28 +1,17 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { PRODUCTS, TAX_RATE } from '../utils/MockData';
-import { Customer } from './service/cutomer';
-import { Order } from './service/order';
+import { HttpErrorResponse } from '@angular/common/http';
 
-export interface Product {
-  id: number;
-  name: string;
-  price: number;
-}
-
-export interface OrderLineItem {
-  productId: number;
-  productName: string;
-  price: number;
-  quantity: number;
-  total: number;
-}
+import { Product, PRODUCTS, TAX_RATE } from './utils/MockData';
+import { Customer, CustomerService } from './service/cutomer';
+import { Order, OrderService } from './service/order';
+import { NotificationService } from './service/notification.service';
+import { CUSTOMER_MESSAGES, ORDER_MESSAGES } from './utils/toast-messages';
 
 @Injectable({ providedIn: 'root' })
 export class AppStore {
-  private http = inject(HttpClient);
-
-  private readonly baseUrl = 'http://localhost:5001/api'; // swap for your real API later
+  private customerService = inject(CustomerService);
+  private orderService = inject(OrderService);
+  private notify = inject(NotificationService);
 
   customers = signal<Customer[]>([]);
   orders = signal<Order[]>([]);
@@ -31,38 +20,61 @@ export class AppStore {
 
   loadingCustomers = signal(false);
   loadingOrders = signal(false);
+  customersError = signal<string | null>(null);
+  ordersError = signal<string | null>(null);
 
-  // ---------- COMPUTED ----------
   totalCustomers = computed(() => this.customers().length);
   totalOrders = computed(() => this.orders().length);
-  totalRevenue = computed(() => this.orders().reduce((sum, o) => sum + o.total, 0));
+  totalRevenue = computed(() => this.orders().reduce((sum, o: any) => sum + (o.total ?? 0), 0));
 
-  // ---------- CUSTOMER API CALLS ----------
+  private extractMessage(err: HttpErrorResponse): string {
+    return err.error?.message || err.message || 'Something went wrong';
+  }
+
+  // ---------- CUSTOMERS ----------
   loadCustomers() {
     this.loadingCustomers.set(true);
-    this.http.get<any>(`${this.baseUrl}/customers`).subscribe({
+    this.customersError.set(null);
+    this.customerService.getAll().subscribe({
       next: (data) => {
-        const resultdata: any = data.data;
-        console.log(resultdata);
-        const mapped: Customer[] = resultdata.map((u: any) => ({
-          id: u.id,
-          firstName: u.name.split(' ')[0],
-          lastName: u.name.split(' ')[1] || '',
-          email: u.email,
-          phone: u.phone,
-          address: u.address || '',
-          city: u.city || '',
-          zip: u.address?.zipcode || '',
-        }));
-        console.log(mapped);
-        this.customers.set(mapped);
-        console.log(this.customers(), 'customeres');
+        this.customers.set(data);
         this.loadingCustomers.set(false);
       },
-      error: (err) => {
-        console.error('Failed to load customers', err);
+      error: (err: HttpErrorResponse) => {
+        this.customersError.set(this.extractMessage(err));
         this.loadingCustomers.set(false);
       },
+    });
+  }
+
+  addCustomer(customer: Omit<Customer, 'id'>) {
+    this.customerService.create(customer).subscribe({
+      next: (created) => {
+        this.customers.update((list) => [...list, created]);
+        this.notify.success(CUSTOMER_MESSAGES.ADD_SUCCESS);
+      },
+      error: (err: HttpErrorResponse) => this.customersError.set(this.extractMessage(err)),
+    });
+  }
+
+  updateCustomer(id: string, updated: Omit<Customer, 'id'>) {
+    this.customerService.update(id, updated).subscribe({
+      next: (result) => {
+        this.customers.update((list) => list.map((c) => (c.id === id ? result : c)));
+        this.notify.success(CUSTOMER_MESSAGES.UPDATE_SUCCESS);
+      },
+      error: (err: HttpErrorResponse) => this.customersError.set(this.extractMessage(err)),
+    });
+  }
+
+  deleteCustomer(id: string) {
+    this.customerService.delete(id).subscribe({
+      next: () => {
+        this.customers.update((list) => list.filter((c) => c.id !== id));
+        this.notify.success(CUSTOMER_MESSAGES.DELETE_SUCCESS);
+      },
+
+      error: (err: HttpErrorResponse) => this.customersError.set(this.extractMessage(err)),
     });
   }
 
@@ -70,98 +82,59 @@ export class AppStore {
     return this.customers().find((c) => c.id === id);
   }
 
-  addCustomer(customer: Omit<Customer, 'id'>) {
-    const { firstName, lastName, ...rest } = customer;
-    const cutomerpayload = { ...rest, name: firstName + ' ' + lastName };
-    this.http.post<any>(`${this.baseUrl}/customers`, cutomerpayload).subscribe({
-      next: (created) => {
-        const { name, ...rest } = created;
-        const addNewCustomer = {
-          ...rest,
-          firstName: name.split(' ')[0],
-          lastName: name.split(' ')[1] || '',
-        };
-        this.customers.update((list) => [...list, ...addNewCustomer]);
-      },
-      error: (err) => console.error('Failed to add customer', err),
-    });
-  }
-
-  updateCustomer(id: string, updated: Omit<Customer, 'id'>) {
-    this.http.put<any>(`${this.baseUrl}/customers/${id}`, updated).subscribe({
-      next: () => {
-        this.customers.update((list) => list.map((c) => (c.id === id ? { ...updated, id } : c)));
-      },
-      error: (err) => console.error('Failed to update customer', err),
-    });
-  }
-
-  deleteCustomer(id: string) {
-    this.http.delete(`${this.baseUrl}/customers/${id}`).subscribe({
-      next: () => {
-        this.customers.update((list) => list.filter((c) => c.id !== id));
-      },
-      error: (err) => console.error('Failed to delete customer', err),
-    });
-  }
-
-  // ---------- ORDER API CALLS ----------
-  // JSONPlaceholder has no "orders" resource, so we map onto /posts as a stand-in
+  // ---------- ORDERS ----------
   loadOrders() {
     this.loadingOrders.set(true);
-
-    this.http.get<any>(`${this.baseUrl}/orders`).subscribe({
-      next: (result) => {
-        console.log(result.data);
-        this.orders.set(result.data);
+    this.ordersError.set(null);
+    this.orderService.getAll().subscribe({
+      next: (data) => {
+        this.orders.set(data);
         this.loadingOrders.set(false);
       },
-      error: (err) => {
-        console.error('Failed to load orders', err);
+      error: (err: HttpErrorResponse) => {
+        this.ordersError.set(this.extractMessage(err));
         this.loadingOrders.set(false);
       },
     });
-  }
-
-  getOrderById(id: string): Order | undefined {
-    console.log(id, 'hjvjhv');
-    return this.orders().find((o) => o.id === id);
   }
 
   addOrder(order: Omit<Order, 'id'>) {
-    this.http.post<any>(`${this.baseUrl}/orders`, order).subscribe({
+    this.orderService.create(order).subscribe({
       next: (created) => {
-        console.log(created.data);
-        const newOrder = created.data;
-        this.orders.update((list) => [newOrder, ...list]);
+        this.orders.update((list) => [created, ...list]);
+        this.notify.success(ORDER_MESSAGES.ADD_SUCCESS);
       },
-      error: (err) => console.error('Failed to add order', err),
+      error: (err: HttpErrorResponse) => this.ordersError.set(this.extractMessage(err)),
     });
   }
 
   updateOrder(id: string, updated: Omit<Order, 'id'>) {
-    this.http.patch<any>(`${this.baseUrl}/orders/${id}`, updated).subscribe({
-      next: () => {
-        this.orders.update((list) => list.map((o) => (o.id === id ? { ...updated, id } : o)));
+    this.orderService.update(id, updated).subscribe({
+      next: (result) => {
+        this.orders.update((list) => list.map((o) => (o.id === id ? result : o)));
+        this.notify.success(ORDER_MESSAGES.UPDATE_SUCCESS);
       },
-      error: (err) => console.error('Failed to update order', err),
+      error: (err: HttpErrorResponse) => this.ordersError.set(this.extractMessage(err)),
     });
   }
 
   deleteOrder(id: string) {
-    this.http.delete(`${this.baseUrl}/orders/${id}`).subscribe({
+    this.orderService.delete(id).subscribe({
       next: () => {
         this.orders.update((list) => list.filter((o) => o.id !== id));
+        this.notify.success(ORDER_MESSAGES.DELETE_SUCCESS);
       },
-      error: (err) => console.error('Failed to delete order', err),
+      error: (err: HttpErrorResponse) => this.ordersError.set(this.extractMessage(err)),
     });
   }
 
+  getOrderById(id: string): Order | undefined {
+    return this.orders().find((o) => o.id === id);
+  }
+
   // ---------- PRODUCTS ----------
-  // keep products local for now since there's no real product backend
   loadProducts() {
     this.products.set(PRODUCTS);
-    return this.products;
   }
 
   getProductById(id: number): Product | undefined {

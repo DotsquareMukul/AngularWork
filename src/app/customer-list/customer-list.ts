@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppStore } from '../app.store';
 import { Customer } from '../service/cutomer';
-import { DataTable, TableAction, TableColumn } from '../../shared/data-table/data-table';
+import { DataTable, TableAction, TableColumn } from '../shared/data-table/data-table';
 
 @Component({
   selector: 'app-customer-list',

@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
 
 export interface OrderLineItem {
   productId: number;
@@ -22,29 +23,22 @@ export interface Order {
 
 @Injectable({ providedIn: 'root' })
 export class OrderService {
-  private orders: Order[] = [];
-  private orders$ = new BehaviorSubject<Order[]>(this.orders);
+  private http = inject(HttpClient);
+  private baseUrl = 'http://localhost:5001/api/orders';
 
-  getOrders() {
-    return this.orders$.asObservable();
-  }
-  updateOrder(id: string, updated: Omit<Order, 'id'>) {
-    this.orders = this.orders.map((o) => (o.id === id ? { ...updated, id } : o));
-    this.orders$.next(this.orders);
+  getAll(): Observable<Order[]> {
+    return this.http.get<any>(this.baseUrl).pipe(map((res) => res.data));
   }
 
-  getOrderById(id: string): Order | undefined {
-    return this.orders.find((o) => o.id === id);
+  create(order: Omit<Order, 'id'>): Observable<Order> {
+    return this.http.post<any>(this.baseUrl, order).pipe(map((res) => res.data));
   }
 
-  addOrder(order: Omit<Order, 'id'>) {
-    const newOrder: Order = { ...order, id: String(Date.now()) };
-    this.orders = [...this.orders, newOrder];
-    this.orders$.next(this.orders);
+  update(id: string, order: Omit<Order, 'id'>): Observable<Order> {
+    return this.http.patch<any>(`${this.baseUrl}/${id}`, order).pipe(map(() => ({ ...order, id })));
   }
 
-  deleteOrder(id: string) {
-    this.orders = this.orders.filter((o) => o.id !== id);
-    this.orders$.next(this.orders);
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }

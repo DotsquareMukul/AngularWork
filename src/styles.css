@@ -1,3 +1,31 @@
-/* You can add global styles to this file, and also import other style files */
+.snackbar-panel-success {
+  --mat-snack-bar-container-color: #dcfce7;
+  --mat-snack-bar-supporting-text-color: #14532d;
+  --mat-snack-bar-button-color: #14532d;
+}
 
-@import 'tailwindcss';
+.snackbar-panel-error {
+  --mat-snack-bar-container-color: #fee2e2;
+  --mat-snack-bar-supporting-text-color: #7f1d1d;
+  --mat-snack-bar-button-color: #7f1d1d;
+  --mat-snack-bar-container-max-height: 40px;
+}
+
+.snackbar-panel-warning {
+  --mat-snack-bar-container-color: #fef3c7;
+  --mat-snack-bar-supporting-text-color: #78350f;
+  --mat-snack-bar-button-color: #78350f;
+  --mat-snack-bar-container-max-height: 40px;
+}
+
+.snackbar-panel-info {
+  --mat-snack-bar-container-color: #dbeafe;
+  --mat-snack-bar-supporting-text-color: #1e3a5f;
+  --mat-snack-bar-button-color: #1e3a5f;
+  --mat-snack-bar-container-max-height: 40px;
+}
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  min-height: 56px;
+  padding: 10px 16px;
+  max-height: 50px;
+}

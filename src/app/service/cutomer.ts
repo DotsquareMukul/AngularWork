@@ -1,10 +1,7 @@
-import { Service } from '@angular/core';
-
-@Service()
-export class Cutomer {}
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { customersData } from '../../utils/MockData';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface Customer {
   id: string;
@@ -18,22 +15,49 @@ export interface Customer {
 
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
-  private customers: Customer[] = customersData;
+  private http = inject(HttpClient);
+  private baseUrl = 'http://localhost:5001/api/customers';
 
-  private customers$ = new BehaviorSubject<Customer[]>(this.customers);
-
-  getCustomers() {
-    return this.customers$.asObservable();
+  getAll(): Observable<Customer[]> {
+    return this.http.get<any>(this.baseUrl).pipe(
+      map((res) =>
+        res.data.map((u: any) => ({
+          id: u.id,
+          firstName: u.name.split(' ')[0],
+          lastName: u.name.split(' ')[1] || '',
+          email: u.email,
+          phone: u.phone,
+          address: u.address || '',
+          city: u.city || '',
+          zip: u.address?.zipcode || '',
+        })),
+      ),
+    );
   }
 
-  addCustomer(customer: Omit<Customer, 'id'>) {
-    const newCustomer: Customer = { ...customer, id: String(Date.now().toString) };
-    this.customers = [...this.customers, newCustomer];
-    this.customers$.next(this.customers);
+  create(customer: Omit<Customer, 'id'>): Observable<Customer> {
+    const { firstName, lastName, ...rest } = customer;
+    const payload = { ...rest, name: `${firstName} ${lastName}` };
+
+    return this.http.post<any>(this.baseUrl, payload).pipe(
+      map((created) => {
+        const { name, ...rest } = created;
+        return {
+          ...rest,
+          firstName: name.split(' ')[0],
+          lastName: name.split(' ')[1] || '',
+        };
+      }),
+    );
   }
 
-  deleteCustomer(id: string) {
-    this.customers = this.customers.filter((c) => c.id !== id);
-    this.customers$.next(this.customers);
+  update(id: string, customer: Omit<Customer, 'id'>): Observable<Customer> {
+    return this.http
+      .put<any>(`${this.baseUrl}/${id}`, customer)
+      .pipe(map(() => ({ ...customer, id })));
+  }
+
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }

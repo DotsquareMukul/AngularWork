@@ -1,0 +1,7 @@
+<div class="snackbar-content" [class]="'snackbar-' + data.type">
+  <mat-icon class="snackbar-icon">{{ icon }}</mat-icon>
+  <span class="snackbar-message">{{ data.message }}</span>
+  <button mat-icon-button (click)="close()" class="snackbar-close">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>

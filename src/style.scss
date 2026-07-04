@@ -1,0 +1,37 @@
+@use '@angular/material' as mat;
+
+.completed {
+  @include mat.chips-overrides(
+    (
+      label-text-color: #15803d,
+      elevated-container-color: #9ddab2,
+    )
+  );
+}
+
+.cancelled {
+  @include mat.chips-overrides(
+    (
+      label-text-color: #b91c1c,
+      elevated-container-color: #ad1515,
+    )
+  );
+}
+
+.processing {
+  @include mat.chips-overrides(
+    (
+      label-text-color: #1e40af,
+      elevated-container-color: #dbeafe,
+    )
+  );
+}
+
+.pending {
+  @include mat.chips-overrides(
+    (
+      label-text-color: #b45309,
+      elevated-container-color: #fef3c7,
+    )
+  );
+}

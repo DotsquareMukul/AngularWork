@@ -1,0 +1,39 @@
+.snackbar-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 8px; /* increase this to grow height */
+  max-height: 48px; /* or set explicit height here */
+  width: 100%;
+}
+
+.snackbar-icon {
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.snackbar-message {
+  flex: 1;
+  font-size: 14px;
+}
+
+.snackbar-close {
+  flex-shrink: 0;
+  color: inherit;
+}
+
+/* Type-based colors */
+.snackbar-success {
+  color: #14532d;
+}
+.snackbar-error {
+  color: #7f1d1d;
+}
+.snackbar-warning {
+  color: #78350f;
+}
+.snackbar-info {
+  color: #1e3a5f;
+}

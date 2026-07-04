@@ -1,4 +1,4 @@
-import { Customer } from '../app/service/cutomer';
+import { Customer } from '../service/cutomer';
 
 export const customersData: Customer[] = [
   {

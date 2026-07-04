@@ -45,6 +45,7 @@ export class CustomerFormComponent implements OnInit {
       return;
     }
     this.store.addCustomer(this.customerForm.value);
+
     this.router.navigate(['/customer-list']);
   }
 }

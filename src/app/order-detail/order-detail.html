@@ -15,7 +15,7 @@
       </div>
       <div class="info-row">
         <span class="label">Status</span>
-        <mat-chip [color]="getStatusColor(order.status)" selected>
+        <mat-chip [class]="order.status" selected>
           {{ order.status }}
         </mat-chip>
       </div>

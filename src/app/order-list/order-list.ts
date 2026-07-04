@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { DataTable, TableAction, TableColumn } from '../../shared/data-table/data-table';
+import { DataTable, TableAction, TableColumn } from '../shared/data-table/data-table';
 import { Order } from '../service/order';
 import { AppStore } from '../app.store';
 

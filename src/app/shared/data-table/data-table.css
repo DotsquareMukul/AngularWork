@@ -27,7 +27,6 @@
 }
 
 .actions-cell {
-  display: flex;
   gap: 8px;
 }
 
