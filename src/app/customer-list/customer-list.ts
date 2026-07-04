@@ -2,9 +2,9 @@ import { Component, effect, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AppStore } from '../app.store';
 import { Customer } from '../service/cutomer';
 import { DataTable, TableAction, TableColumn } from '../shared/data-table/data-table';
+import { CustomerStore } from '../store/customer.store';
 
 @Component({
   selector: 'app-customer-list',
@@ -28,7 +28,7 @@ export class CustomerListComponent implements OnInit {
   actions: TableAction[] = [{ label: 'Delete', type: 'delete' }];
 
   constructor(
-    private store: AppStore,
+    private customerStore: CustomerStore,
     private router: Router,
   ) {
     effect(() => {
@@ -37,23 +37,23 @@ export class CustomerListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.loadCustomers();
+    this.customerStore.loadCustomers();
   }
 
   get loading(): boolean {
-    return this.store.loadingCustomers();
+    return this.customerStore.loadingCustomers();
   }
   get customers(): Customer[] {
-    return this.store.customers();
+    return this.customerStore.customers();
   }
   applyFilter() {
     const term = this.searchTerm.trim().toLowerCase();
     if (!term) {
-      this.filteredCustomers = this.store.customers();
-      console.log(this.store.customers());
+      this.filteredCustomers = this.customerStore.customers();
+      console.log(this.customerStore.customers());
       return;
     }
-    this.filteredCustomers = this.store.customers().filter((customer) =>
+    this.filteredCustomers = this.customerStore.customers().filter((customer) =>
       this.columns.some((col) => {
         const value = (customer as any)[col.key];
         return value && value.toString().toLowerCase().includes(term);
@@ -63,7 +63,7 @@ export class CustomerListComponent implements OnInit {
 
   onAction(event: { type: string; row: Customer }) {
     if (event.type === 'delete') {
-      this.store.deleteCustomer(event.row.id);
+      this.customerStore.deleteCustomer(event.row.id);
     }
   }
 

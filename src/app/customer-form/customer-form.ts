@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AppStore } from '../app.store';
+import { CustomerStore } from '../store/customer.store';
 
 @Component({
   selector: 'app-customer-form',
@@ -16,7 +16,7 @@ export class CustomerFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private store: AppStore,
+    private cutsomerStore: CustomerStore,
   ) {}
 
   ngOnInit() {
@@ -44,7 +44,7 @@ export class CustomerFormComponent implements OnInit {
       this.customerForm.markAllAsTouched();
       return;
     }
-    this.store.addCustomer(this.customerForm.value);
+    this.cutsomerStore.addCustomer(this.customerForm.value);
 
     this.router.navigate(['/customer-list']);
   }

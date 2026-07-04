@@ -6,7 +6,7 @@
 
 .data-table th,
 .data-table td {
-  text-align: left;
+  text-align: center;
   padding: 10px 12px;
   border-bottom: 1px solid #e5e7eb;
 }
@@ -27,6 +27,8 @@
 }
 
 .actions-cell {
+  display: flex;
+  justify-content: center;
   gap: 8px;
 }
 

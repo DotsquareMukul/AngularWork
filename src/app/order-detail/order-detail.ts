@@ -7,8 +7,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
-import { AppStore } from '../app.store';
 import { Order } from '../service/order';
+import { OrderStore } from '../store/order.store';
 
 @Component({
   selector: 'app-order-detail',
@@ -30,7 +30,7 @@ export class OrderDetailComponent implements OnInit {
   displayedColumns: string[] = ['productName', 'price', 'quantity', 'total'];
 
   constructor(
-    private store: AppStore,
+    private orderStore: OrderStore,
     private route: ActivatedRoute,
     private router: Router,
   ) {}
@@ -45,11 +45,11 @@ export class OrderDetailComponent implements OnInit {
     const id = idParam;
 
     // handle direct URL/refresh where orders haven't loaded yet
-    if (this.store.orders().length === 0) {
-      this.store.loadOrders();
+    if (this.orderStore.orders().length === 0) {
+      this.orderStore.loadOrders();
     }
 
-    this.order = this.store.getOrderById(id) ?? null;
+    this.order = this.orderStore.getOrderById(id) ?? null;
 
     if (!this.order) {
       this.router.navigate(['/order-list']);

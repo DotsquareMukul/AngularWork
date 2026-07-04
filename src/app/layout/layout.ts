@@ -1,6 +1,7 @@
 import { Component, effect, OnInit, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { AppStore } from '../app.store';
+import { OrderStore } from '../store/order.store';
+import { CustomerStore } from '../store/customer.store';
 
 @Component({
   selector: 'app-layout',
@@ -12,28 +13,31 @@ import { AppStore } from '../app.store';
 export class Layout implements OnInit {
   title = signal('OrderManagement');
 
-  constructor(private store: AppStore) {
+  constructor(
+    private orderState: OrderStore,
+    private customerState: CustomerStore,
+  ) {
     effect(() => {
-      this.store.loadCustomers();
-      this.store.loadOrders();
+      this.customerState.loadCustomers();
+      this.orderState.loadOrders();
     });
   }
 
   ngOnInit(): void {
     // ensure data is loaded so the counts aren't stuck at 0
-    this.store.loadCustomers();
-    this.store.loadOrders();
+    this.customerState.loadCustomers();
+    this.orderState.loadOrders();
   }
 
   get customersCount() {
-    return this.store.totalCustomers();
+    return this.customerState.totalCustomers();
   }
 
   get ordersCount() {
-    return this.store.totalOrders();
+    return this.orderState.totalOrders();
   }
 
   get revenue() {
-    return this.store.totalRevenue();
+    return this.orderState.totalRevenue();
   }
 }

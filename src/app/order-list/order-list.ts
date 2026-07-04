@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DataTable, TableAction, TableColumn } from '../shared/data-table/data-table';
 import { Order } from '../service/order';
-import { AppStore } from '../app.store';
+import { OrderStore } from '../store/order.store';
 
 @Component({
   selector: 'app-order-list',
@@ -29,24 +29,24 @@ export class OrderListComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private store: AppStore,
+    private orderStore: OrderStore,
   ) {}
 
   ngOnInit() {
-    this.store.loadOrders();
+    this.orderStore.loadOrders();
   }
 
   get orders(): Order[] {
-    return this.store.orders();
+    return this.orderStore.orders();
   }
 
   get loading(): boolean {
-    return this.store.loadingOrders();
+    return this.orderStore.loadingOrders();
   }
 
   onAction(event: { type: string; row: Order }) {
     if (event.type === 'delete') {
-      this.store.deleteOrder(event.row.id);
+      this.orderStore.deleteOrder(event.row.id);
     } else if (event.type === 'edit') {
       this.router.navigate(['/order-form', event.row.id]);
     } else if (event.type === 'view') {

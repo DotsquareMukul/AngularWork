@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AppStore } from '../app.store';
+import { OrderStore } from '../store/order.store';
+import { CustomerStore } from '../store/customer.store';
+import { ProductStore } from '../store/product.store';
 
 @Component({
   selector: 'app-order-form',
@@ -21,29 +23,31 @@ export class OrderFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private store: AppStore,
     private router: Router,
     private route: ActivatedRoute,
+    private orderStore: OrderStore,
+    private customerStore: CustomerStore,
+    private productStore: ProductStore,
   ) {
-    this.taxRate = this.store.taxRate;
+    this.taxRate = this.orderStore.taxRate;
   }
 
   // reads live from the store's signals — no local copies to go stale
   get customers() {
-    return this.store.customers();
+    return this.customerStore.customers();
   }
 
   get products() {
-    return this.store.products();
+    return this.productStore.products();
   }
 
   get isLoading(): boolean {
-    return this.store.loadingCustomers();
+    return this.customerStore.loadingCustomers();
   }
 
   ngOnInit() {
-    this.store.loadCustomers();
-    this.store.loadProducts();
+    this.customerStore.loadCustomers();
+    this.productStore.loadProducts();
 
     this.orderForm = this.fb.group({
       customerId: ['', Validators.required],
@@ -62,7 +66,7 @@ export class OrderFormComponent implements OnInit {
 
   loadOrderForEdit(id: string) {
     console.log(id, 'form');
-    const order = this.store.getOrderById(id);
+    const order = this.orderStore.getOrderById(id);
     console.log(order, 'edit order');
     console.log(order);
     if (!order) {
@@ -167,9 +171,9 @@ export class OrderFormComponent implements OnInit {
     };
 
     if (this.isEditMode && this.orderId !== null) {
-      this.store.updateOrder(this.orderId, orderPayload);
+      this.orderStore.updateOrder(this.orderId, orderPayload);
     } else {
-      this.store.addOrder(orderPayload);
+      this.orderStore.addOrder(orderPayload);
     }
 
     this.router.navigate(['/order-list']);
