@@ -32,9 +32,7 @@ export class OrderListComponent implements OnInit {
     private orderStore: OrderStore,
   ) {}
 
-  ngOnInit() {
-    this.orderStore.loadOrders();
-  }
+  ngOnInit() {}
 
   get orders(): Order[] {
     return this.orderStore.orders();

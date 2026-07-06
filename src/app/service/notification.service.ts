@@ -6,7 +6,7 @@ import { SnackbarComponent, SnackbarType } from '../shared/snackbar/snackbar';
 export class NotificationService {
   private snackBar = inject(MatSnackBar);
 
-  private show(message: string, type: SnackbarType, duration = 1000000) {
+  private show(message: string, type: SnackbarType, duration = 1000) {
     this.snackBar.openFromComponent(SnackbarComponent, {
       data: { message, type },
       duration,

@@ -41,7 +41,8 @@ export class CustomerService {
 
     return this.http.post<any>(this.baseUrl, payload).pipe(
       map((created) => {
-        const { name, ...rest } = created;
+        const { name, ...rest } = created.data;
+        console.log(name, rest);
         return {
           ...rest,
           firstName: name.split(' ')[0],

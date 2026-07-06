@@ -46,7 +46,6 @@ export class OrderFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.customerStore.loadCustomers();
     this.productStore.loadProducts();
 
     this.orderForm = this.fb.group({

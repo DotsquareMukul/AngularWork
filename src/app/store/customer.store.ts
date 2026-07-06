@@ -37,7 +37,9 @@ export class CustomerStore {
   addCustomer(customer: Omit<Customer, 'id'>) {
     this.customerService.create(customer).subscribe({
       next: (created) => {
+        console.log(created, 'sdsdf');
         this.customers.update((list) => [...list, created]);
+        console.log(created, 'sdsdf');
         this.notify.success(CUSTOMER_MESSAGES.ADD_SUCCESS);
       },
       error: (err: HttpErrorResponse) => this.customersError.set(this.extractMessage(err)),

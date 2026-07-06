@@ -1,4 +1,4 @@
-import { Component, effect, OnInit } from '@angular/core';
+import { Component, effect, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,7 +14,6 @@ import { CustomerStore } from '../store/customer.store';
   styleUrls: ['./customer-list.css'],
 })
 export class CustomerListComponent implements OnInit {
-  filteredCustomers: Customer[] = [];
   searchTerm = '';
 
   columns: TableColumn[] = [
@@ -30,15 +29,9 @@ export class CustomerListComponent implements OnInit {
   constructor(
     private customerStore: CustomerStore,
     private router: Router,
-  ) {
-    effect(() => {
-      this.applyFilter();
-    });
-  }
+  ) {}
 
-  ngOnInit() {
-    this.customerStore.loadCustomers();
-  }
+  ngOnInit() {}
 
   get loading(): boolean {
     return this.customerStore.loadingCustomers();
@@ -46,14 +39,13 @@ export class CustomerListComponent implements OnInit {
   get customers(): Customer[] {
     return this.customerStore.customers();
   }
-  applyFilter() {
+  get filteredCustomers(): Customer[] {
     const term = this.searchTerm.trim().toLowerCase();
-    if (!term) {
-      this.filteredCustomers = this.customerStore.customers();
-      console.log(this.customerStore.customers());
-      return;
-    }
-    this.filteredCustomers = this.customerStore.customers().filter((customer) =>
+    const list = this.customerStore.customers();
+
+    if (!term) return list;
+
+    return list.filter((customer) =>
       this.columns.some((col) => {
         const value = (customer as any)[col.key];
         return value && value.toString().toLowerCase().includes(term);

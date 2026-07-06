@@ -25,8 +25,6 @@ export class Layout implements OnInit {
 
   ngOnInit(): void {
     // ensure data is loaded so the counts aren't stuck at 0
-    this.customerState.loadCustomers();
-    this.orderState.loadOrders();
   }
 
   get customersCount() {
