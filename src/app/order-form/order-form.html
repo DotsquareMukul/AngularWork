@@ -20,6 +20,9 @@
     <select id="status" formControlName="status">
       <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
     </select>
+    <div *ngIf="f['status'].invalid && f['status'].touched">
+      <small>status is required.</small>
+    </div>
   </div>
 
   <div class="items-section">

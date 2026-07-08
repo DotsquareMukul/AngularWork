@@ -1,62 +1,111 @@
-<div class="form-header">
-  <button type="button" class="back-btn" (click)="goBack()">← Back</button>
-  <h2>Create Customer</h2>
+<div class="page-wrapper">
+  <!-- Header -->
+  <div class="form-header">
+    <button mat-icon-button type="button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div>
+      <h2>Create Customer</h2>
+      <p>Fill in the details below to add a new customer</p>
+    </div>
+  </div>
+
+  <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+    <div class="form-layout">
+      <!-- Personal Info Card -->
+      <mat-card>
+        <mat-card-header>
+          <mat-icon mat-card-avatar>person</mat-icon>
+          <mat-card-title>Personal Info</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="card-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+            <mat-icon matPrefix>badge</mat-icon>
+            <input matInput formControlName="firstName" />
+            @if (f['firstName'].invalid && f['firstName'].touched) {
+              @if (f['firstName'].errors?.['required']) {
+                <mat-error>First name is required.</mat-error>
+              } @else if (f['firstName'].errors?.['minlength']) {
+                <mat-error>Minimum 2 characters.</mat-error>
+              }
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <mat-icon matPrefix>badge</mat-icon>
+            <input matInput formControlName="lastName" />
+            @if (f['lastName'].invalid && f['lastName'].touched) {
+              <mat-error>Last name is required.</mat-error>
+            }
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Contact Info Card -->
+      <mat-card>
+        <mat-card-header>
+          <mat-icon mat-card-avatar>contacts</mat-icon>
+          <mat-card-title>Contact Info</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="card-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <mat-icon matPrefix>mail_outline</mat-icon>
+            <input matInput type="email" formControlName="email" />
+            @if (f['email'].invalid && f['email'].touched) {
+              @if (f['email'].errors?.['required']) {
+                <mat-error>Email is required.</mat-error>
+              } @else if (f['email'].errors?.['email']) {
+                <mat-error>Enter a valid email.</mat-error>
+              }
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <mat-icon matPrefix>phone</mat-icon>
+            <input matInput formControlName="phone" />
+            @if (f['phone'].invalid && f['phone'].touched) {
+              <mat-error>Enter a valid 10-digit phone number.</mat-error>
+            }
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Address Card -->
+      <mat-card class="span-full">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>location_on</mat-icon>
+          <mat-card-title>Address</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="card-grid">
+          <mat-form-field appearance="outline" class="span-full">
+            <mat-label>Address</mat-label>
+            <mat-icon matPrefix>home</mat-icon>
+            <input matInput formControlName="address" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>City</mat-label>
+            <mat-icon matPrefix>location_city</mat-icon>
+            <input matInput formControlName="city" />
+            @if (f['city'].invalid && f['city'].touched) {
+              <mat-error>City is required.</mat-error>
+            }
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button mat-stroked-button type="button" (click)="goBack()">Cancel</button>
+      <button mat-raised-button color="primary" type="submit">
+        <mat-icon>save</mat-icon>
+        Save Customer
+      </button>
+    </div>
+  </form>
 </div>
-<form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
-  <div>
-    <label for="firstName">First Name</label>
-    <input id="firstName" formControlName="firstName" />
-    <div *ngIf="f['firstName'].invalid && f['firstName'].touched">
-      <small *ngIf="f['firstName'].errors?.['required']">First name is required.</small>
-      <small *ngIf="f['firstName'].errors?.['minlength']">Minimum 2 characters.</small>
-    </div>
-  </div>
-
-  <div>
-    <label for="lastName">Last Name</label>
-    <input id="lastName" formControlName="lastName" />
-    <div *ngIf="f['lastName'].invalid && f['lastName'].touched">
-      <small>Last name is required.</small>
-    </div>
-  </div>
-
-  <div>
-    <label for="email">Email</label>
-    <input id="email" type="email" formControlName="email" />
-    <div *ngIf="f['email'].invalid && f['email'].touched">
-      <small *ngIf="f['email'].errors?.['required']">Email is required.</small>
-      <small *ngIf="f['email'].errors?.['email']">Enter a valid email.</small>
-    </div>
-  </div>
-
-  <div>
-    <label for="phone">Phone</label>
-    <input id="phone" formControlName="phone" />
-    <div *ngIf="f['phone'].invalid && f['phone'].touched">
-      <small>Enter a valid 10-digit phone number.</small>
-    </div>
-  </div>
-
-  <div>
-    <label for="address">Address</label>
-    <input id="address" formControlName="address" />
-  </div>
-
-  <div>
-    <label for="city">City</label>
-    <input id="city" formControlName="city" />
-    <div *ngIf="f['city'].invalid && f['city'].touched">
-      <small>City is required.</small>
-    </div>
-  </div>
-
-  <!-- <div>
-    <label for="zip">ZIP Code</label>
-    <input id="zip" formControlName="zip" />
-    <div *ngIf="f['zip'].invalid && f['zip'].touched">
-      <small>Enter a valid 6-digit ZIP code.</small>
-    </div>
-  </div> -->
-
-  <button type="submit">Submit</button>
-</form>

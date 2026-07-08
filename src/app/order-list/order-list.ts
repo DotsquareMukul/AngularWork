@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DataTable, TableAction, TableColumn } from '../shared/data-table/data-table';
 import { Order } from '../service/order';
 import { OrderStore } from '../store/order.store';
+import { ConfirmDialogComponent } from '../shared/confirm-dialuge/confirm-dialuge';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-order-list',
@@ -31,7 +33,7 @@ export class OrderListComponent implements OnInit {
     private router: Router,
     private orderStore: OrderStore,
   ) {}
-
+  private dialog = inject(MatDialog);
   ngOnInit() {}
 
   get orders(): Order[] {
@@ -44,7 +46,19 @@ export class OrderListComponent implements OnInit {
 
   onAction(event: { type: string; row: Order }) {
     if (event.type === 'delete') {
-      this.orderStore.deleteOrder(event.row.id);
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          title: 'Delete Order',
+          message: 'This action cannot be undone.',
+          confirmLabel: 'Delete',
+          cancelLabel: 'Cancel',
+        },
+      });
+      dialogRef.afterClosed().subscribe((result: boolean) => {
+        if (result === true) {
+          this.orderStore.deleteOrder(event.row.id);
+        }
+      });
     } else if (event.type === 'edit') {
       this.router.navigate(['/order-form', event.row.id]);
     } else if (event.type === 'view') {

@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderStore } from '../store/order.store';
 import { CustomerStore } from '../store/customer.store';
 import { ProductStore } from '../store/product.store';
+import { ConfirmDialogComponent } from '../shared/confirm-dialuge/confirm-dialuge';
+import { MatDialog } from '@angular/material/dialog';
+import { map, Observable, take, tap } from 'rxjs';
+import { CanDeactivateI } from '../guard/can-deactivate-guard';
 
 @Component({
   selector: 'app-order-form',
@@ -13,7 +17,34 @@ import { ProductStore } from '../store/product.store';
   templateUrl: './order-form.html',
   styleUrls: ['./order-form.css'],
 })
-export class OrderFormComponent implements OnInit {
+export class OrderFormComponent implements OnInit, CanDeactivateI {
+  submitted = signal(false);
+
+  // canDeactivate(): Observable<boolean> | boolean {
+  //   console.log('canDeactivate called', {
+  //     dirty: this.orderForm.dirty,
+  //     submitted: this.submitted,
+  //   });
+  //   if (this.submitted || !this.orderForm.dirty) {
+  //     return true;
+  //   }
+  //   if (this.dialog.openDialogs.length) {
+  //     return false;
+  //   }
+  //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+  //     width: '380px',
+  //     disableClose: true,
+  //     restoreFocus: false,
+  //     data: {
+  //       title: 'Unsaved Changes',
+  //       message: 'Do you want to leave this page? Your changes will be lost.',
+  //       confirmLabel: 'Leave',
+  //       cancelLabel: 'Stay',
+  //     },
+  //   });
+
+  //   return dialogRef.afterClosed();
+  // }
   orderForm!: FormGroup;
   taxRate: number;
 
@@ -125,7 +156,12 @@ export class OrderFormComponent implements OnInit {
     const price = this.getProductPrice(item.productId);
     return price * (item.quantity || 0);
   }
-
+  isDirty() {
+    return this.orderForm.dirty;
+  }
+  isSubmitted() {
+    return this.submitted();
+  }
   get subtotal(): number {
     return this.items.controls.reduce((sum, _, i) => sum + this.getLineTotal(i), 0);
   }
@@ -143,7 +179,6 @@ export class OrderFormComponent implements OnInit {
       this.orderForm.markAllAsTouched();
       return;
     }
-
     const formValue = this.orderForm.value;
     const selectedCustomer = this.customers.find((c) => c.id === formValue.customerId);
     const lineItems = formValue.items.map((item: any) => {
@@ -174,7 +209,7 @@ export class OrderFormComponent implements OnInit {
     } else {
       this.orderStore.addOrder(orderPayload);
     }
-
+    this.submitted.set(true);
     this.router.navigate(['/order-list']);
   }
 

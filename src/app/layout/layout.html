@@ -1,21 +1,56 @@
-<div class="app-shell">
-  <header class="header">
-    <h1>{{ title() }}</h1>
-    <span>Customers: {{ customersCount }}</span>
-    <span>Orders: {{ ordersCount }}</span>
-    <span>Total Revenue: ₹{{ revenue }}</span>
-  </header>
+<mat-sidenav-container class="app-shell">
+  <!-- Sidebar -->
+  <mat-sidenav mode="side" opened class="sidenav">
+    <div class="sidenav-header">
+      <mat-icon>dashboard</mat-icon>
+      <span class="brand">My App</span>
+    </div>
 
-  <div class="body">
-    <aside class="sidebar">
-      <nav>
-        <a routerLink="/customer-list" routerLinkActive="active">Customers</a>
-        <a routerLink="/order-list" routerLinkActive="active">Orders</a>
-      </nav>
-    </aside>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/customer-list" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>people</mat-icon>
+        <span matListItemTitle>Customers</span>
+      </a>
+      <a mat-list-item routerLink="/order-list" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>receipt_long</mat-icon>
+        <span matListItemTitle>Orders</span>
+      </a>
+    </mat-nav-list>
 
-    <main class="content">
+    <div class="sidenav-footer">
+      <button mat-stroked-button color="warn" (click)="logOut()">
+        <mat-icon>logout</mat-icon>
+        Log Out
+      </button>
+    </div>
+  </mat-sidenav>
+
+  <!-- Main content -->
+  <mat-sidenav-content>
+    <!-- Header -->
+    <mat-toolbar color="primary" class="header">
+      <span class="app-title">{{ title() }}</span>
+      <span class="spacer"></span>
+
+      <mat-chip-set>
+        <mat-chip>
+          <mat-icon matChipAvatar>people</mat-icon>
+          Customers: {{ customersCount }}
+        </mat-chip>
+        <mat-chip>
+          <mat-icon matChipAvatar>receipt_long</mat-icon>
+          Orders: {{ ordersCount }}
+        </mat-chip>
+        <mat-chip>
+          <mat-icon matChipAvatar>currency_rupee</mat-icon>
+          Revenue: ₹{{ revenue }}
+        </mat-chip>
+      </mat-chip-set>
+    </mat-toolbar>
+
+    <!-- Page content -->
+    <div class="content">
       <router-outlet></router-outlet>
-    </main>
-  </div>
-</div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

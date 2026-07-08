@@ -1,0 +1,21 @@
+<div class="dialog-container">
+  <div class="dialog-icon">
+    <mat-icon color="warn">warning_amber</mat-icon>
+  </div>
+
+  <h2 mat-dialog-title>{{ data.title || 'Unsaved Changes' }}</h2>
+
+  <mat-dialog-content>
+    <p>{{ data.message || 'Do you want to leave this page? Your changes will be lost.' }}</p>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-stroked-button (click)="stay()">
+      {{ data.cancelLabel || 'Stay' }}
+    </button>
+
+    <button mat-raised-button color="warn" (click)="leave()">
+      {{ data.confirmLabel || 'Leave' }}
+    </button>
+  </mat-dialog-actions>
+</div>

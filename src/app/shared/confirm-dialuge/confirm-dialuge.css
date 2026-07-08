@@ -1,0 +1,27 @@
+.dialog-container {
+  padding: 8px;
+  min-width: 320px;
+}
+.dialog-icon {
+  text-align: center;
+  margin-bottom: 8px;
+}
+.dialog-icon mat-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+}
+mat-dialog-content p {
+  color: #555;
+  margin: 0;
+}
+mat-dialog-actions {
+  gap: 8px;
+  padding-bottom: 8px;
+}
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-bottom: 8px;
+}
