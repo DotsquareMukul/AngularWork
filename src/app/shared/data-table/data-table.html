@@ -1,41 +1,59 @@
-<table class="data-table">
-  <thead>
-    <tr>
-      <th *ngFor="let col of columns" (click)="sort(col)" [class.sortable]="col.sortable">
-        {{ col.label }}
-        <span *ngIf="col.sortable && sortKey === col.key">
-          {{ sortDirection === 'asc' ? '▲' : '▼' }}
-        </span>
-      </th>
-      <th *ngIf="actions.length">Actions</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr *ngFor="let row of pagedData">
-      <td *ngFor="let col of columns">{{ row[col.key] }}</td>
-      <td *ngIf="actions.length" class="actions-cell">
-        <button
-          *ngFor="let action of actions"
-          (click)="onAction(action.type, row)"
-          class="action-btn"
-          [class]="action.type"
+<div class="table-wrapper mat-elevation-z2">
+  <table mat-table [dataSource]="pagedData" matSort (matSortChange)="onSort($event)">
+    <!-- Dynamic columns -->
+    @for (col of columns; track col.key) {
+      <ng-container [matColumnDef]="col.key">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [mat-sort-header]="col.sortable ? col.key : ''"
+          [disabled]="!col.sortable"
         >
-          {{ action.label }}
-        </button>
+          {{ col.label }}
+        </th>
+        <td mat-cell *matCellDef="let row">{{ row[col.key] }}</td>
+      </ng-container>
+    }
+
+    <!-- Actions column -->
+    @if (actions.length) {
+      <ng-container matColumnDef="__actions__">
+        <th mat-header-cell *matHeaderCellDef class="actions-header">Actions</th>
+        <td mat-cell *matCellDef="let row" class="actions-cell">
+          @for (action of actions; track action.type) {
+            <button
+              mat-icon-button
+              [ngClass]="getActionClass(action.type)"
+              [matTooltip]="action.label"
+              (click)="onAction(action.type, row)"
+            >
+              <mat-icon>{{ getActionIcon(action) }}</mat-icon>
+            </button>
+          }
+        </td>
+      </ng-container>
+    }
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" class="data-row"></tr>
+
+    <!-- Empty state row -->
+    <tr class="mat-row empty-row" *matNoDataRow>
+      <td [attr.colspan]="displayedColumns.length">
+        <div class="empty-state">
+          <mat-icon>inbox</mat-icon>
+          <span>No data available</span>
+        </div>
       </td>
     </tr>
+  </table>
 
-    <tr *ngIf="pagedData.length === 0">
-      <td [attr.colspan]="columns.length + (actions.length ? 1 : 0)" class="empty-row">
-        No data available.
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<div class="pagination" *ngIf="totalPages > 1">
-  <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">Prev</button>
-  <span>Page {{ currentPage }} of {{ totalPages }}</span>
-  <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+  <mat-paginator
+    [length]="totalItems"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 25]"
+    [pageIndex]="currentPage"
+    (page)="onPage($event)"
+    showFirstLastButtons
+  />
 </div>

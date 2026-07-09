@@ -1,4 +1,4 @@
-import { Component, effect, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { OrderStore } from '../store/order.store';
 import { CustomerStore } from '../store/customer.store';
@@ -9,6 +9,9 @@ import { MatNavList, MatListItem, MatListItemIcon, MatListItemTitle } from '@ang
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MatSidenav } from '@angular/material/sidenav';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-layout',
@@ -47,8 +50,21 @@ export class Layout implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    // ensure data is loaded so the counts aren't stuck at 0
+  @ViewChild('sidenav') sidenav!: MatSidenav;
+
+  isMobile = signal(false);
+
+  private breakpointObserver = inject(BreakpointObserver);
+
+  ngOnInit() {
+    this.breakpointObserver.observe([Breakpoints.Handset]).subscribe((result) => {
+      this.isMobile.set(result.matches);
+      if (result.matches) {
+        this.sidenav.close();
+      } else {
+        this.sidenav.open();
+      }
+    });
   }
 
   get customersCount() {

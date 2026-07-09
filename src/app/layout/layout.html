@@ -1,19 +1,42 @@
 <mat-sidenav-container class="app-shell">
-  <!-- Sidebar -->
-  <mat-sidenav mode="side" opened class="sidenav">
+  <mat-sidenav
+    #sidenav
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="!isMobile()"
+    class="sidenav"
+  >
     <div class="sidenav-header">
       <mat-icon>dashboard</mat-icon>
       <span class="brand">My App</span>
     </div>
 
     <mat-nav-list>
-      <a mat-list-item routerLink="/customer-list" routerLinkActive="active-link">
+      <a
+        mat-list-item
+        routerLink="/customer-list"
+        routerLinkActive="active-link"
+        (click)="isMobile() && sidenav.close()"
+      >
         <mat-icon matListItemIcon>people</mat-icon>
         <span matListItemTitle>Customers</span>
       </a>
-      <a mat-list-item routerLink="/order-list" routerLinkActive="active-link">
+      <a
+        mat-list-item
+        routerLink="/order-list"
+        routerLinkActive="active-link"
+        (click)="isMobile() && sidenav.close()"
+      >
         <mat-icon matListItemIcon>receipt_long</mat-icon>
         <span matListItemTitle>Orders</span>
+      </a>
+      <a
+        mat-list-item
+        routerLink="/product-form"
+        routerLinkActive="active-link"
+        (click)="isMobile() && sidenav.close()"
+      >
+        <mat-icon matListItemIcon>receipt_long</mat-icon>
+        <span matListItemTitle>Product Register</span>
       </a>
     </mat-nav-list>
 
@@ -25,10 +48,15 @@
     </div>
   </mat-sidenav>
 
-  <!-- Main content -->
   <mat-sidenav-content>
-    <!-- Header -->
     <mat-toolbar color="primary" class="header">
+      <!-- Hamburger — only visible on mobile -->
+      @if (isMobile()) {
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
+
       <span class="app-title">{{ title() }}</span>
       <span class="spacer"></span>
 
@@ -48,7 +76,6 @@
       </mat-chip-set>
     </mat-toolbar>
 
-    <!-- Page content -->
     <div class="content">
       <router-outlet></router-outlet>
     </div>

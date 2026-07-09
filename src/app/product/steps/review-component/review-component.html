@@ -1,0 +1,23 @@
+<div class="review-container">
+  @for (section of sections(); track section.title) {
+    <mat-card class="review-card">
+      <mat-card-header>
+        <mat-card-title>{{ section.title }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @for (row of section.rows; track row.label) {
+          <div class="review-row">
+            <span class="label">{{ row.label }}</span>
+            @if (row.value !== null && row.value !== undefined && row.value !== '') {
+              <span class="value">{{ row.value }}</span>
+            } @else {
+              <span class="value empty">Not provided</span>
+            }
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <button matButton (click)="handleSubmit()">submit</button>
+</div>

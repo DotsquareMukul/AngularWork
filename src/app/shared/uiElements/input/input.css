@@ -1,0 +1,8 @@
+.app-field {
+  width: 100%;
+}
+.app-field-error {
+  color: var(--mat-sys-error, #b3261e);
+  font-size: 12px;
+  margin: -12px 0 8px 12px;
+}

@@ -1,0 +1,30 @@
+<mat-form-field appearance="outline" class="app-field">
+  <mat-label>{{ label() }}</mat-label>
+  @if (multiline()) {
+    <textarea
+      matInput
+      [rows]="rows()"
+      [placeholder]="placeholder()"
+      [ngModel]="value"
+      [disabled]="disabled"
+      (ngModelChange)="onValueChange($event)"
+      (blur)="onTouched()"
+    ></textarea>
+  } @else {
+    <input
+      matInput
+      [type]="type()"
+      [placeholder]="placeholder()"
+      [ngModel]="value"
+      [disabled]="disabled"
+      (ngModelChange)="onValueChange($event)"
+      (blur)="onTouched()"
+    />
+  }
+  @if (hint() && !invalid()) {
+    <mat-hint>{{ hint() }}</mat-hint>
+  }
+</mat-form-field>
+@if (invalid()) {
+  <div class="app-field-error">{{ errorText() }}</div>
+}

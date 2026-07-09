@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConfirmDialogComponent } from './confirm-dialuge';
+import { ProductManufacture } from './product-manufacture';
 
-describe('ConfirmDialuge', () => {
-  let component: ConfirmDialogComponent;
-  let fixture: ComponentFixture<ConfirmDialogComponent>;
+describe('ProductManufacture', () => {
+  let component: ProductManufacture;
+  let fixture: ComponentFixture<ProductManufacture>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConfirmDialogComponent],
+      imports: [ProductManufacture],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ConfirmDialogComponent);
+    fixture = TestBed.createComponent(ProductManufacture);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

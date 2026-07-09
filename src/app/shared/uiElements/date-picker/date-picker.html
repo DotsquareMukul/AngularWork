@@ -1,0 +1,18 @@
+<mat-form-field appearance="outline" class="app-field">
+  <mat-label>{{ label() }}</mat-label>
+  <input
+    matInput
+    [matDatepicker]="picker"
+    [min]="minDate()"
+    [max]="maxDate()"
+    [ngModel]="dateValue"
+    [disabled]="disabled"
+    (ngModelChange)="onValueChange($event)"
+    (blur)="onTouched()"
+  />
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
+@if (invalid()) {
+  <div class="app-field-error">{{ errorText() }}</div>
+}

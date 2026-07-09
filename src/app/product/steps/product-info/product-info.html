@@ -1,0 +1,91 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title> Product Information </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="form" class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Product Name</mat-label>
+        <input matInput formControlName="productName" />
+
+        <mat-error *ngIf="form.controls.productName.hasError('required')">
+          Product name is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Product Code</mat-label>
+        <input matInput formControlName="productCode" />
+
+        <mat-error *ngIf="form.controls.productCode.hasError('required')">
+          Product code is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+
+        <mat-select formControlName="productCategory">
+          <mat-option *ngFor="let category of categories" [value]="category.value">
+            {{ category.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Product Type</mat-label>
+
+        <mat-select formControlName="productType">
+          <mat-option *ngFor="let type of productTypes" [value]="type.value">
+            {{ type.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Product Description</mat-label>
+
+        <textarea matInput rows="4" formControlName="productDescription"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Launch Date</mat-label>
+
+        <input matInput [matDatepicker]="picker" formControlName="launchDate" />
+
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+
+        <mat-datepicker #picker />
+      </mat-form-field>
+
+      <div class="duration-group">
+        <mat-form-field appearance="outline">
+          <mat-label>Duration</mat-label>
+
+          <input matInput type="number" formControlName="productDuration" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Unit</mat-label>
+
+          <mat-select formControlName="productDurationUnit">
+            <mat-option *ngFor="let unit of durationUnits" [value]="unit.value">
+              {{ unit.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+
+        <mat-select formControlName="productStatus">
+          <mat-option *ngFor="let status of statuses" [value]="status.value">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,22 @@
+<mat-stepper
+  [selectedIndex]="selectedIndex"
+  (selectedIndexChange)="selectedIndexChange.emit($event)"
+>
+  @for (step of steps; track step.label) {
+    <mat-step [label]="step.label">
+      <ng-container *ngComponentOutlet="step.component"> </ng-container>
+
+      @if (selectedIndex > 0) {
+        <div>
+          <button matButton (click)="handlePrevious()">Back</button>
+        </div>
+      }
+
+      @if (selectedIndex < steps.length - 1) {
+        <div>
+          <button matButton (click)="handleNext()">Next</button>
+        </div>
+      }
+    </mat-step>
+  }
+</mat-stepper>

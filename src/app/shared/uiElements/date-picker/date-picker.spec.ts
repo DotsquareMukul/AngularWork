@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConfirmDialogComponent } from './confirm-dialuge';
+import { DatePickerFieldComponent } from './date-picker';
 
-describe('ConfirmDialuge', () => {
-  let component: ConfirmDialogComponent;
-  let fixture: ComponentFixture<ConfirmDialogComponent>;
+describe('DatePickerFieldComponent', () => {
+  let component: DatePickerFieldComponent;
+  let fixture: ComponentFixture<DatePickerFieldComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConfirmDialogComponent],
+      imports: [DatePickerFieldComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ConfirmDialogComponent);
+    fixture = TestBed.createComponent(DatePickerFieldComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

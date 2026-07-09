@@ -1,0 +1,17 @@
+<div class="duration-field">
+  <mat-form-field appearance="outline" class="amount-field">
+    <mat-label>{{ amountLabel() }}</mat-label>
+    <input matInput type="number" min="0" [formControl]="amountControl()" />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="unit-field">
+    <mat-label>Unit</mat-label>
+    <mat-select [formControl]="unitControl()">
+      @for (option of unitOptions(); track option.value) {
+        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+@if (amountInvalid() || unitInvalid()) {
+  <div class="app-field-error">{{ errorText() }}</div>
+}

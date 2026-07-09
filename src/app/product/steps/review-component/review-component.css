@@ -1,0 +1,38 @@
+.review-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.review-card {
+  width: 100%;
+}
+
+.review-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.review-row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+}
+
+.value {
+  color: rgba(0, 0, 0, 0.87);
+  text-align: right;
+  max-width: 60%;
+  word-break: break-word;
+}
+
+.value.empty {
+  color: rgba(0, 0, 0, 0.38);
+  font-style: italic;
+}

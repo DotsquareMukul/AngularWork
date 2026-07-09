@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConfirmDialogComponent } from './confirm-dialuge';
+import { ProductRawMaterial } from './product-raw-material';
 
-describe('ConfirmDialuge', () => {
-  let component: ConfirmDialogComponent;
-  let fixture: ComponentFixture<ConfirmDialogComponent>;
+describe('ProductRawMaterial', () => {
+  let component: ProductRawMaterial;
+  let fixture: ComponentFixture<ProductRawMaterial>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConfirmDialogComponent],
+      imports: [ProductRawMaterial],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ConfirmDialogComponent);
+    fixture = TestBed.createComponent(ProductRawMaterial);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
