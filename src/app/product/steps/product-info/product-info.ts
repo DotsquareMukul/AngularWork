@@ -15,8 +15,11 @@ import {
   DURATION_UNIT_OPTIONS,
   PRODUCT_STATUS_OPTIONS,
 } from '../../../utils/dropDownOption';
-import { PackagingInfo, ProductInfo } from '../../../models/product-models';
+import { ProductInfo } from '../../../models/product-models';
 import { ProductRegistryStore } from '../../../store/productFormStore';
+import { FieldConfig } from '../../../models/field-config';
+import { DynamicFormFieldComponent } from '../../../shared/dynamic-form-field/dynamic-form-field';
+import { CardComponent } from '../../../shared/card/card';
 
 @Component({
   selector: 'app-product-info',
@@ -31,21 +34,41 @@ import { ProductRegistryStore } from '../../../store/productFormStore';
     MatNativeDateModule,
     MatButtonModule,
     MatCardModule,
+    DynamicFormFieldComponent,
+    CardComponent,
   ],
   templateUrl: './product-info.html',
-  styleUrls: ['./product-info.scss'],
+  styleUrls: ['./product-info.css'],
 })
 export class ProductInfoComponent implements OnInit {
   private fb = inject(FormBuilder);
   private store = inject(ProductRegistryStore);
 
-  categories = PRODUCT_CATEGORY_OPTIONS;
-
-  productTypes = PRODUCT_TYPE_OPTIONS;
-
-  durationUnits = DURATION_UNIT_OPTIONS;
-
-  statuses = PRODUCT_STATUS_OPTIONS;
+  fields: FieldConfig[] = [
+    { name: 'productName', label: 'Product Name', type: 'text' },
+    { name: 'productCode', label: 'Product Code', type: 'text' },
+    {
+      name: 'productCategory',
+      label: 'Category',
+      type: 'select',
+      options: PRODUCT_CATEGORY_OPTIONS,
+    },
+    { name: 'productType', label: 'Product Type', type: 'select', options: PRODUCT_TYPE_OPTIONS },
+    { name: 'productDescription', label: 'Description', type: 'textarea' },
+    { name: 'launchDate', label: 'Launch Date', type: 'date' },
+    { name: 'productStatus', label: 'Status', type: 'select', options: PRODUCT_STATUS_OPTIONS },
+    {
+      name: 'productDuration',
+      label: 'Duration',
+      type: 'number',
+    },
+    {
+      name: 'productDurationUnit',
+      label: 'Duration Unit',
+      type: 'select',
+      options: DURATION_UNIT_OPTIONS,
+    },
+  ];
   ngOnInit() {
     this.form.valueChanges.subscribe((value) => {
       this.store.setProductInfoValid(this.form.valid);

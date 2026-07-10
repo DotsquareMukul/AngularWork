@@ -1,7 +1,4 @@
-<mat-stepper
-  [selectedIndex]="selectedIndex"
-  (selectedIndexChange)="selectedIndexChange.emit($event)"
->
+<mat-stepper [selectedIndex]="selectedIndex" (selectedIndexChange)="onSelectionChange($event)">
   @for (step of steps; track step.label) {
     <mat-step [label]="step.label">
       <ng-container *ngComponentOutlet="step.component"> </ng-container>

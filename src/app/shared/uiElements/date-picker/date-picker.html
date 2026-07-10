@@ -5,7 +5,7 @@
     [matDatepicker]="picker"
     [min]="minDate()"
     [max]="maxDate()"
-    [ngModel]="dateValue"
+    [(ngModel)]="dateValue"
     [disabled]="disabled"
     (ngModelChange)="onValueChange($event)"
     (blur)="onTouched()"

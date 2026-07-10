@@ -30,7 +30,7 @@ import { MatNativeDateModule } from '@angular/material/core';
       multi: true,
     },
   ],
-  template: './date-picker.html',
+  templateUrl: './date-picker.html',
   styleUrls: ['./date-picker.css'],
 })
 export class DatePickerFieldComponent implements ControlValueAccessor {

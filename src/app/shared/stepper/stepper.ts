@@ -38,6 +38,7 @@ export class StepperComponent {
   }
   onSelectionChange(index: number) {
     this.selectedIndex = index;
+    console.log('Selected index changed to:', index);
     this.selectedIndexChange.emit(index);
   }
 }

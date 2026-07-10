@@ -1,23 +1,18 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatCardModule } from '@angular/material/card';
 import {
   DURATION_UNIT_OPTIONS,
   PRODUCT_CATEGORY_OPTIONS,
   SUPPLIER_OPTIONS,
   WEIGHT_UNIT_OPTIONS,
 } from '../../../utils/dropDownOption';
-import { MatCardModule } from '@angular/material/card';
 import { ProductRegistryStore } from '../../../store/productFormStore';
 import { RawMaterialInfo } from '../../../models/product-models';
-
-type DurationUnit = 'Days' | 'Months' | 'Years';
+import { DynamicFormFieldComponent } from '../../../shared/dynamic-form-field/dynamic-form-field';
+import { FieldConfig } from '../../../models/field-config';
+import { CardComponent } from '../../../shared/card/card';
 
 @Component({
   selector: 'app-raw-material',
@@ -25,38 +20,16 @@ type DurationUnit = 'Days' | 'Months' | 'Years';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
     MatCardModule,
+    DynamicFormFieldComponent,
+    CardComponent,
   ],
   templateUrl: './product-raw-material.html',
-  styleUrls: ['./product-raw-material.scss'],
+  styleUrls: ['./product-raw-material.css'],
 })
-export class RawMaterialComponent {
+export class RawMaterialComponent implements OnInit {
   private fb = inject(FormBuilder);
   private store = inject(ProductRegistryStore);
-  ngOnInit() {
-    this.form.valueChanges.subscribe((value) => {
-      this.store.setRawMaterialValid(this.form.valid);
-      if (this.form.valid) {
-        this.store.setRawMaterial(value as RawMaterialInfo);
-      }
-    });
-
-    // run once on init in case the form starts valid/invalid
-    this.store.setRawMaterialValid(this.form.valid);
-  }
-
-  suppliers = SUPPLIER_OPTIONS;
-
-  categories = PRODUCT_CATEGORY_OPTIONS;
-
-  units = WEIGHT_UNIT_OPTIONS;
-
-  durationUnits = DURATION_UNIT_OPTIONS;
 
   form = this.fb.group({
     rawMaterialName: ['', Validators.required],
@@ -69,4 +42,43 @@ export class RawMaterialComponent {
     shelfLifeDuration: [null, [Validators.required, Validators.min(1)]],
     shelfLifeDurationUnit: [null, Validators.required],
   });
+
+  fields: FieldConfig[] = [
+    { name: 'rawMaterialName', label: 'Raw Material Name', type: 'text' },
+    { name: 'materialCode', label: 'Material Code', type: 'text' },
+    { name: 'supplierName', label: 'Supplier Name', type: 'select', options: SUPPLIER_OPTIONS },
+    {
+      name: 'materialCategory',
+      label: 'Material Category',
+      type: 'select',
+      options: PRODUCT_CATEGORY_OPTIONS,
+    },
+    { name: 'materialQuantity', label: 'Material Quantity', type: 'number' },
+    {
+      name: 'unitOfMeasurement',
+      label: 'Unit of Measurement',
+      type: 'select',
+      options: WEIGHT_UNIT_OPTIONS,
+    },
+    { name: 'procurementDate', label: 'Procurement Date', type: 'date' },
+    { name: 'shelfLifeDuration', label: 'Shelf Life Duration', type: 'number' },
+    {
+      name: 'shelfLifeDurationUnit',
+      label: 'Shelf Life Unit',
+      type: 'select',
+      options: DURATION_UNIT_OPTIONS,
+    },
+  ];
+
+  ngOnInit() {
+    this.form.valueChanges.subscribe((value) => {
+      this.store.setRawMaterialValid(this.form.valid);
+      if (this.form.valid) {
+        this.store.setRawMaterial(value as RawMaterialInfo);
+      }
+    });
+
+    // run once on init in case the form starts valid/invalid
+    this.store.setRawMaterialValid(this.form.valid);
+  }
 }

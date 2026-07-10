@@ -1,0 +1,33 @@
+@switch (field.type) {
+  @case ('text') {
+    <app-text-input [formControlName]="field.name" [label]="field.label" />
+  }
+
+  @case ('number') {
+    <app-text-input [formControlName]="field.name" [label]="field.label" type="number" />
+  }
+
+  @case ('textarea') {
+    <app-text-input
+      [formControlName]="field.name"
+      [label]="field.label"
+      [multiline]="true"
+      [rows]="3"
+    />
+  }
+
+  @case ('date') {
+    <app-date-picker-field
+      [formControlName]="field.name"
+      [label]="field.label"
+    ></app-date-picker-field>
+  }
+
+  @case ('select') {
+    <app-select-field
+      [formControlName]="field.name"
+      [label]="field.label"
+      [options]="field.options ?? []"
+    />
+  }
+}

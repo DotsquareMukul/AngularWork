@@ -5,7 +5,7 @@
       matInput
       [rows]="rows()"
       [placeholder]="placeholder()"
-      [ngModel]="value"
+      [(ngModel)]="value"
       [disabled]="disabled"
       (ngModelChange)="onValueChange($event)"
       (blur)="onTouched()"
@@ -15,7 +15,7 @@
       matInput
       [type]="type()"
       [placeholder]="placeholder()"
-      [ngModel]="value"
+      [(ngModel)]="value"
       [disabled]="disabled"
       (ngModelChange)="onValueChange($event)"
       (blur)="onTouched()"
