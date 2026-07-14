@@ -1,9 +1,10 @@
-import { Component, forwardRef, input } from '@angular/core';
+import { Component, forwardRef, input, OnInit } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { DynamicErrorStateMatcher } from '../../../utils/dynamic-error-state-matcher';
 
 /**
  * Reusable date picker, wired as a ControlValueAccessor.
@@ -33,18 +34,24 @@ import { MatNativeDateModule } from '@angular/material/core';
   templateUrl: './date-picker.html',
   styleUrls: ['./date-picker.css'],
 })
-export class DatePickerFieldComponent implements ControlValueAccessor {
+export class DatePickerFieldComponent implements ControlValueAccessor, OnInit {
   label = input<string>('');
   errorText = input<string>('This field is required');
-  invalid = input<boolean>(false);
   minDate = input<Date | null>(null);
   maxDate = input<Date | null>(null);
+  invalid = input<boolean>(false);
+
+  matcher!: DynamicErrorStateMatcher;
 
   dateValue: Date | null = null;
   disabled = false;
 
   private onChange: (value: string | null) => void = () => {};
   onTouched: () => void = () => {};
+
+  ngOnInit(): void {
+    this.matcher = new DynamicErrorStateMatcher(() => this.invalid());
+  }
 
   writeValue(value: string | null): void {
     this.dateValue = value ? new Date(value) : null;

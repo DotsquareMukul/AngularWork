@@ -3,6 +3,7 @@
     <mat-label>{{ amountLabel() }}</mat-label>
     <input matInput type="number" min="0" [formControl]="amountControl()" />
   </mat-form-field>
+
   <mat-form-field appearance="outline" class="unit-field">
     <mat-label>Unit</mat-label>
     <mat-select [formControl]="unitControl()">
@@ -12,6 +13,7 @@
     </mat-select>
   </mat-form-field>
 </div>
+
 @if (amountInvalid() || unitInvalid()) {
-  <div class="app-field-error">{{ errorText() }}</div>
+  <mat-error class="duration-error">{{ errorText() }}</mat-error>
 }

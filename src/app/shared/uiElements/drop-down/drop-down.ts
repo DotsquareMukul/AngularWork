@@ -1,9 +1,10 @@
-import { Component, forwardRef, input } from '@angular/core';
+import { Component, forwardRef, input, OnInit } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DropdownOption } from '../../../models/product-models';
+import { DynamicErrorStateMatcher } from '../../../utils/dynamic-error-state-matcher';
 
 /**
  * Reusable select dropdown, wired as a ControlValueAccessor.
@@ -26,22 +27,27 @@ import { DropdownOption } from '../../../models/product-models';
     },
   ],
   templateUrl: './drop-down.html',
-
   styleUrls: ['./drop-down.css'],
 })
-export class SelectFieldComponent implements ControlValueAccessor {
+export class SelectFieldComponent implements ControlValueAccessor, OnInit {
   label = input<string>('');
   options = input<DropdownOption[]>([]);
   errorText = input<string>('This field is required');
-  invalid = input<boolean>(false);
   loading = input<boolean>(false);
   allowEmpty = input<boolean>(false);
+  invalid = input<boolean>(false);
+
+  matcher!: DynamicErrorStateMatcher;
 
   value: string | null = null;
   disabled = false;
 
   private onChange: (value: string | null) => void = () => {};
   onTouched: () => void = () => {};
+
+  ngOnInit(): void {
+    this.matcher = new DynamicErrorStateMatcher(() => this.invalid());
+  }
 
   writeValue(value: string | null): void {
     this.value = value ?? null;

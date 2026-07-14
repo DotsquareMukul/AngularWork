@@ -9,10 +9,11 @@
     [disabled]="disabled"
     (ngModelChange)="onValueChange($event)"
     (blur)="onTouched()"
+    [errorStateMatcher]="matcher"
   />
   <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
   <mat-datepicker #picker></mat-datepicker>
 </mat-form-field>
 @if (invalid()) {
-  <div class="app-field-error">{{ errorText() }}</div>
+  <mat-error>{{ errorText() }}</mat-error>
 }

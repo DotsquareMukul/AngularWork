@@ -48,6 +48,7 @@ export class ProductRegistryComponent {
     const isValid = this.store.stepValidity()[currentIndex];
     console.log(`Step ${currentIndex} is valid:`, isValid);
     if (!isValid) {
+      this.store.touchStep(currentIndex);
       return;
     }
 
@@ -69,7 +70,7 @@ export class ProductRegistryComponent {
     }
 
     const payload = {
-      ...this.store.product(),
+      ...this.store.ProductInfo(),
       ...this.store.rawMaterial(),
       ...this.store.manufacturing(),
       ...this.store.packaging(),

@@ -1,5 +1,5 @@
 // shared/dynamic-form-field/dynamic-form-field.component.ts
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlContainer, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -33,4 +33,10 @@ import { SelectFieldComponent } from '../uiElements/drop-down/drop-down';
 })
 export class DynamicFormFieldComponent {
   @Input({ required: true }) field!: FieldConfig;
+  private controlContainer = inject(ControlContainer);
+
+  get isInvalid(): boolean {
+    const control = this.controlContainer.control?.get(this.field.name);
+    return !!(control?.invalid && (control?.touched || control?.dirty));
+  }
 }

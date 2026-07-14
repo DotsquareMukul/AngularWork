@@ -25,7 +25,7 @@ interface ReviewSection {
 export class ReviewComponent {
   private store = inject(ProductRegistryStore);
 
-  productInfo = this.store.product;
+  productInfo = this.store.ProductInfo;
   rawMaterial = this.store.rawMaterial;
   manufacturing = this.store.manufacturing;
   packaging = this.store.packaging;
@@ -124,7 +124,7 @@ export class ReviewComponent {
     }
 
     const payload = {
-      product: this.store.product(),
+      product: this.store.ProductInfo(),
       rawMaterial: this.store.rawMaterial(),
       manufacturing: this.store.manufacturing(),
       packaging: this.store.packaging(),

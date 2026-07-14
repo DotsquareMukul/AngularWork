@@ -1,5 +1,6 @@
 <mat-form-field appearance="outline" class="app-field">
   <mat-label>{{ label() }}</mat-label>
+
   @if (multiline()) {
     <textarea
       matInput
@@ -9,6 +10,7 @@
       [disabled]="disabled"
       (ngModelChange)="onValueChange($event)"
       (blur)="onTouched()"
+      [errorStateMatcher]="matcher"
     ></textarea>
   } @else {
     <input
@@ -19,12 +21,14 @@
       [disabled]="disabled"
       (ngModelChange)="onValueChange($event)"
       (blur)="onTouched()"
+      [errorStateMatcher]="matcher"
     />
   }
+
   @if (hint() && !invalid()) {
     <mat-hint>{{ hint() }}</mat-hint>
   }
+  @if (invalid()) {
+    <mat-error>{{ errorText() }}</mat-error>
+  }
 </mat-form-field>
-@if (invalid()) {
-  <div class="app-field-error">{{ errorText() }}</div>
-}

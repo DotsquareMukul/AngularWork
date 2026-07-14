@@ -12,4 +12,6 @@ export interface FieldConfig {
   options?: SelectOption[]; // required when type === 'select'
   maxLength?: number;
   placeholder?: string;
+  textError?: string;
+  invalid?: boolean | undefined;
 }

@@ -5,6 +5,7 @@
     [disabled]="disabled"
     (ngModelChange)="onValueChange($event)"
     (closed)="onTouched()"
+    [errorStateMatcher]="matcher"
   >
     @if (allowEmpty()) {
       <mat-option [value]="null">-- None --</mat-option>
@@ -13,10 +14,11 @@
       <mat-option [value]="option.value">{{ option.label }}</mat-option>
     }
   </mat-select>
+
   @if (loading()) {
     <mat-spinner matSuffix diameter="18"></mat-spinner>
   }
+  @if (invalid()) {
+    <mat-error>{{ errorText() }}</mat-error>
+  }
 </mat-form-field>
-@if (invalid()) {
-  <div class="app-field-error">{{ errorText() }}</div>
-}

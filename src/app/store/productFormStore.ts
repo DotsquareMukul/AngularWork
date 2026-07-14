@@ -28,7 +28,7 @@ export class ProductRegistryStore {
   readonly error = signal<string | null>(null);
   readonly success = signal(false);
 
-  readonly product = computed(() => this.state().product);
+  readonly ProductInfo = computed(() => this.state().product);
 
   readonly rawMaterial = computed(() => this.state().rawMaterial);
 
@@ -37,7 +37,7 @@ export class ProductRegistryStore {
   readonly packaging = computed(() => this.state().packaging);
 
   readonly payload = computed(() => ({
-    product: this.product(),
+    product: this.ProductInfo(),
     rawMaterial: this.rawMaterial(),
     manufacturing: this.manufacturing(),
     packaging: this.packaging(),
@@ -52,6 +52,26 @@ export class ProductRegistryStore {
   rawMaterialValid = signal(false);
   manufacturingValid = signal(false);
   packagingValid = signal(false);
+
+  readonly productInfoTouchTrigger = signal(0);
+  readonly rawMaterialTouchTrigger = signal(0);
+  readonly manufacturingTouchTrigger = signal(0);
+  readonly packagingTouchTrigger = signal(0);
+
+  private get touchTriggers() {
+    return [
+      this.productInfoTouchTrigger,
+      this.rawMaterialTouchTrigger,
+      this.manufacturingTouchTrigger,
+      this.packagingTouchTrigger,
+      // no 5th entry needed since Review has no form to touch
+    ];
+  }
+
+  touchStep(index: number) {
+    const trigger = this.touchTriggers[index];
+    trigger?.update((v) => v + 1); // e.g. productInfoTouchTrigger: 0 → 1
+  }
 
   setProductInfoValid(valid: boolean) {
     this.productInfoValid.set(valid);
@@ -74,7 +94,10 @@ export class ProductRegistryStore {
     this.packagingValid(),
   ]);
 
-  setProduct(product: ProductInfo) {
+  // must be a getter (or moved into the constructor), NOT a plain class field —
+  // see explanation below for why field order matters here
+
+  setProductInfo(product: ProductInfo) {
     this.state.update((state) => ({
       ...state,
       product,

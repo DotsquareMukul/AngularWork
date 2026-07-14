@@ -38,4 +38,5 @@ export class DurationFieldComponent {
   errorText = input<string>('Please provide a valid duration and unit');
   amountInvalid = input<boolean>(false);
   unitInvalid = input<boolean>(false);
+  isInvalid = input<boolean>(false);
 }

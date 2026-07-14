@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -29,7 +29,23 @@ import { CardComponent } from '../../../shared/card/card';
 export class PackagingComponent implements OnInit {
   private fb = inject(FormBuilder);
   private store = inject(ProductRegistryStore);
-
+  constructor() {
+    effect(() => {
+      const trigger = this.store.packagingTouchTrigger();
+      console.log('effect fired, trigger value:', trigger);
+      if (trigger > 0) {
+        console.log(
+          'markAllAsTouched called, productName touched:',
+          this.form.get('productName')?.touched,
+        );
+        this.form.markAllAsTouched();
+        console.log(
+          'markAllAsTouched called, productName touched:',
+          this.form.get('productName')?.touched,
+        );
+      }
+    });
+  }
   form = this.fb.group({
     packagingType: ['', Validators.required],
     packagingMaterial: ['', Validators.required],
@@ -57,7 +73,11 @@ export class PackagingComponent implements OnInit {
     { name: 'packagingDate', label: 'Packaging Date', type: 'date' },
     { name: 'packageWeight', label: 'Package Weight', type: 'number' },
     { name: 'weightUnit', label: 'Weight Unit', type: 'select', options: UOM_OPTIONS },
-    { name: 'packageDimensions', label: 'Package Dimensions', type: 'text' },
+    {
+      name: 'packageDimensions',
+      label: 'Package Dimensions',
+      type: 'text',
+    },
     { name: 'storageConditions', label: 'Storage Conditions', type: 'textarea' },
     { name: 'packagingRemarks', label: 'Remarks', type: 'textarea' },
   ];

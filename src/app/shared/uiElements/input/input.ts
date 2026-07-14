@@ -1,16 +1,10 @@
-import { Component, forwardRef, input } from '@angular/core';
+import { Component, forwardRef, input, OnInit } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { DynamicErrorStateMatcher } from '../../../utils/dynamic-error-state-matcher';
 
-/**
- * Reusable text / textarea input, wired as a ControlValueAccessor so it can
- * be used directly with `formControlName` inside any Reactive Form.
- *
- * Usage:
- *   <app-text-input formControlName="productName" label="Product Name" />
- *   <app-text-input formControlName="productDescription" label="Description" [multiline]="true" [rows]="4" />
- */
 @Component({
   selector: 'app-text-input',
   standalone: true,
@@ -25,7 +19,7 @@ import { MatInputModule } from '@angular/material/input';
   templateUrl: './input.html',
   styleUrls: ['./input.css'],
 })
-export class TextInputComponent implements ControlValueAccessor {
+export class TextInputComponent implements ControlValueAccessor, OnInit {
   label = input<string>('');
   placeholder = input<string>('');
   hint = input<string>('');
@@ -35,11 +29,17 @@ export class TextInputComponent implements ControlValueAccessor {
   errorText = input<string>('This field is required');
   invalid = input<boolean>(false);
 
+  matcher!: DynamicErrorStateMatcher;
+
   value = '';
   disabled = false;
 
   private onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
+
+  ngOnInit(): void {
+    this.matcher = new DynamicErrorStateMatcher(() => this.invalid());
+  }
 
   writeValue(value: string): void {
     this.value = value ?? '';

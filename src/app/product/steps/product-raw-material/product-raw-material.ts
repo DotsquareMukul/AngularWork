@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -30,6 +30,15 @@ import { CardComponent } from '../../../shared/card/card';
 export class RawMaterialComponent implements OnInit {
   private fb = inject(FormBuilder);
   private store = inject(ProductRegistryStore);
+  constructor() {
+    effect(() => {
+      const trigger = this.store.rawMaterialTouchTrigger();
+      console.log('effect fired, trigger value:', trigger);
+      if (trigger > 0) {
+        this.form.markAllAsTouched();
+      }
+    });
+  }
 
   form = this.fb.group({
     rawMaterialName: ['', Validators.required],

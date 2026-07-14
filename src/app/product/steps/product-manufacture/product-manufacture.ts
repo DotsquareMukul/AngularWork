@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -30,7 +30,23 @@ import { CardComponent } from '../../../shared/card/card';
 export class ProductManufacturingComponent implements OnInit {
   private fb = inject(FormBuilder);
   private store = inject(ProductRegistryStore);
-
+  constructor() {
+    effect(() => {
+      const trigger = this.store.manufacturingTouchTrigger();
+      console.log('effect fired, trigger value:', trigger);
+      if (trigger > 0) {
+        console.log(
+          'markAllAsTouched called, productName touched:',
+          this.form.get('productName')?.touched,
+        );
+        this.form.markAllAsTouched();
+        console.log(
+          'markAllAsTouched called, productName touched:',
+          this.form.get('productName')?.touched,
+        );
+      }
+    });
+  }
   form = this.fb.group({
     manufacturingPlant: ['', Validators.required],
     batchNumber: ['', Validators.required],

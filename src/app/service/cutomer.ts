@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { environment } from '../../environments/environment.development';
 
 export interface Customer {
@@ -33,6 +33,8 @@ export class CustomerService {
           zip: u.address?.zipcode || '',
         })),
       ),
+
+      shareReplay(1),
     );
   }
 
