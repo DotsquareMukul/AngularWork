@@ -26,7 +26,7 @@
         routerLinkActive="active-link"
         (click)="isMobile() && sidenav.close()"
       >
-        <mat-icon matListItemIcon>receipt_long</mat-icon>
+        <mat-icon matListItemIcon>inventory_2</mat-icon>
         <span matListItemTitle>Orders</span>
       </a>
       <a
@@ -37,6 +37,14 @@
       >
         <mat-icon matListItemIcon>receipt_long</mat-icon>
         <span matListItemTitle>Product Register</span>
+      </a>
+      <a
+        mat-list-item
+        routerLink="/chat"
+        routerLinkActive="active-link"
+        (click)="isMobile() && sidenav.close()"
+        ><mat-icon matListItemIcon>chat</mat-icon>
+        <span matListItemTitle>Ai Chat</span>
       </a>
     </mat-nav-list>
 

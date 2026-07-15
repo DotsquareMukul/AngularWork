@@ -33,7 +33,6 @@ export class CustomerService {
           zip: u.address?.zipcode || '',
         })),
       ),
-
       shareReplay(1),
     );
   }

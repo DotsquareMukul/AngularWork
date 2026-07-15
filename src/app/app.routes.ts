@@ -9,6 +9,8 @@ import { Login } from './auth/login/login';
 import { authGuard } from './guard/auth-guard';
 import { canDeactivateGuard } from './guard/can-deactivate-guard';
 import { ProductRegistryComponent } from './product/product/product';
+import { Observerable } from './observerable/observerable';
+import { ChatComponent } from './chat/chat';
 
 export const routes: Routes = [
   {
@@ -28,7 +30,9 @@ export const routes: Routes = [
       { path: 'order-form/:id', component: OrderFormComponent },
       { path: 'order-detail/:id', component: OrderDetailComponent },
       { path: 'product-form', component: ProductRegistryComponent },
+      { path: 'chat', component: ChatComponent },
+      { path: '**', redirectTo: 'login' },
     ],
   },
-  { path: '**', redirectTo: 'login' }, // ← catch unknown routes
+  { path: 'learning', component: Observerable }, // ← catch unknown routes
 ];
