@@ -1,0 +1,49 @@
+.document-add-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.section-card {
+  width: 100%;
+}
+
+.section-divider {
+  margin: 8px 0;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.inline-spinner {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.error-text {
+  color: var(--mat-sys-error, #b3261e);
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+.success-text {
+  color: #2e7d32;
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+.file-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.file-name {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.875rem;
+}

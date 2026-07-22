@@ -1,0 +1,140 @@
+<div class="document-add-page">
+  <!-- Add Text Document Card -->
+  <!-- <mat-card appearance="outlined" class="section-card">
+    <mat-card-header>
+      <mat-card-title>Add Document</mat-card-title>
+      <mat-card-subtitle>Ingest raw text into the vector store</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Source name</mat-label>
+        <input matInput [(ngModel)]="newSource" name="newSource" placeholder="e.g. policy-notes" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Content</mat-label>
+        <textarea
+          matInput
+          [(ngModel)]="newContent"
+          name="newContent"
+          rows="6"
+          placeholder="Paste or type document content here..."
+        ></textarea>
+      </mat-form-field>
+
+      @if (store.addError()) {
+        <p class="error-text">{{ store.addError() }}</p>
+      }
+      @if (store.addSuccessMessage()) {
+        <p class="success-text">{{ store.addSuccessMessage() }}</p>
+      }
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="onAddDocument()"
+        [disabled]="store.isAdding() || !newContent.trim() || !newSource.trim()"
+      >
+        @if (store.isAdding()) {
+          <mat-spinner diameter="18" class="inline-spinner"></mat-spinner>
+        } @else {
+          Add Document
+        }
+      </button>
+    </mat-card-actions>
+  </mat-card> -->
+
+  <!-- <mat-divider class="section-divider"></mat-divider> -->
+
+  <!-- Upload PDF Card -->
+  <mat-card appearance="outlined" class="section-card">
+    <mat-card-header>
+      <mat-card-title>Add YouTube Transcript</mat-card-title>
+      <mat-card-subtitle>Ingest a video's transcript into the vector store</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>YouTube URL</mat-label>
+        <input
+          matInput
+          [(ngModel)]="newYoutubeUrl"
+          name="newYoutubeUrl"
+          placeholder="https://www.youtube.com/watch?v=..."
+        />
+      </mat-form-field>
+
+      @if (store.youtubeError()) {
+        <p class="error-text">{{ store.youtubeError() }}</p>
+      }
+      @if (store.youtubeSuccessMessage()) {
+        <p class="success-text">{{ store.youtubeSuccessMessage() }}</p>
+      }
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="onAddYoutubeTranscript()"
+        [disabled]="store.isAddingYoutube() || !newYoutubeUrl.trim()"
+      >
+        @if (store.isAddingYoutube()) {
+          <mat-spinner diameter="18" class="inline-spinner"></mat-spinner>
+        } @else {
+          Add Transcript
+        }
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card appearance="outlined" class="section-card">
+    <mat-card-header>
+      <mat-card-title>Upload PDF</mat-card-title>
+      <mat-card-subtitle>Ingest a PDF file into the vector store</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <input
+        #fileInput
+        type="file"
+        accept="application/pdf"
+        hidden
+        (change)="onFileSelected($event)"
+      />
+
+      <div class="file-picker-row">
+        <button mat-stroked-button (click)="triggerFilePicker()">
+          <mat-icon>attach_file</mat-icon>
+          Choose PDF
+        </button>
+        <span class="file-name">{{ selectedFile?.name || 'No file selected' }}</span>
+      </div>
+
+      @if (store.uploadError()) {
+        <p class="error-text">{{ store.uploadError() }}</p>
+      }
+      @if (store.uploadSuccessMessage()) {
+        <p class="success-text">{{ store.uploadSuccessMessage() }}</p>
+      }
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="onUploadPdf()"
+        [disabled]="store.isUploading() || !selectedFile"
+      >
+        @if (store.isUploading()) {
+          <mat-spinner diameter="18" class="inline-spinner"></mat-spinner>
+        } @else {
+          Upload
+        }
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

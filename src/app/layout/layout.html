@@ -7,11 +7,11 @@
   >
     <div class="sidenav-header">
       <mat-icon>dashboard</mat-icon>
-      <span class="brand">My App</span>
+      <span class="brand"> Ai App</span>
     </div>
 
     <mat-nav-list>
-      <a
+      <!-- <a
         mat-list-item
         routerLink="/customer-list"
         routerLinkActive="active-link"
@@ -37,7 +37,7 @@
       >
         <mat-icon matListItemIcon>receipt_long</mat-icon>
         <span matListItemTitle>Product Register</span>
-      </a>
+      </a> -->
       <a
         mat-list-item
         routerLink="/chat"
@@ -45,6 +45,22 @@
         (click)="isMobile() && sidenav.close()"
         ><mat-icon matListItemIcon>chat</mat-icon>
         <span matListItemTitle>Ai Chat</span>
+      </a>
+      <a
+        mat-list-item
+        routerLink="/documnetQuery"
+        routerLinkActive="active-link"
+        (click)="isMobile() && sidenav.close()"
+        ><mat-icon matListItemIcon>find_in_page</mat-icon>
+        <span matListItemTitle> DocumnetQuery</span>
+      </a>
+      <a
+        mat-list-item
+        routerLink="/document-add"
+        routerLinkActive="active-link"
+        (click)="isMobile() && sidenav.close()"
+        ><mat-icon matListItemIcon>add</mat-icon>
+        <span matListItemTitle>Add Document</span>
       </a>
     </mat-nav-list>
 
@@ -68,7 +84,7 @@
       <span class="app-title">{{ title() }}</span>
       <span class="spacer"></span>
 
-      <mat-chip-set>
+      <!-- <mat-chip-set>
         <mat-chip>
           <mat-icon matChipAvatar>people</mat-icon>
           Customers: {{ customersCount }}
@@ -81,7 +97,7 @@
           <mat-icon matChipAvatar>currency_rupee</mat-icon>
           Revenue: ₹{{ revenue }}
         </mat-chip>
-      </mat-chip-set>
+      </mat-chip-set> -->
     </mat-toolbar>
 
     <div class="content">

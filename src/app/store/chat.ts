@@ -3,6 +3,7 @@ import { Injectable, signal, inject, DestroyRef } from '@angular/core';
 import { scan, tap } from 'rxjs';
 import { ChatService } from '../service/chat';
 import { ChatChunk, ChatMessage } from '../models/chat.model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({ providedIn: 'root' })
 export class ChatStore {
@@ -13,13 +14,13 @@ export class ChatStore {
 
   sendMessage(prompt: string) {
     const userMessage: ChatMessage = {
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       role: 'user',
       content: prompt,
       streaming: false,
     };
 
-    const assistantId = crypto.randomUUID();
+    const assistantId = uuidv4();
     const assistantMessage: ChatMessage = {
       id: assistantId,
       role: 'assistant',
@@ -29,9 +30,12 @@ export class ChatStore {
 
     this.messages.update((msgs) => [...msgs, userMessage, assistantMessage]);
     this.isStreaming.set(true);
+    const history = this.messages()
+      .filter((m) => m.id !== assistantMessage.id) // exclude the empty placeholder we just added
+      .map((m) => ({ role: m.role, content: m.content }));
 
     this.chatService
-      .sendMessage(prompt, assistantId)
+      .sendMessage(prompt, assistantId, history)
       .pipe(
         // accumulate chunk text into a running string
         scan((acc: string, chunk: ChatChunk) => acc + chunk.text, ''),

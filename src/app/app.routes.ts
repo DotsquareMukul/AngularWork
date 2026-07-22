@@ -11,6 +11,8 @@ import { canDeactivateGuard } from './guard/can-deactivate-guard';
 import { ProductRegistryComponent } from './product/product/product';
 import { Observerable } from './observerable/observerable';
 import { ChatComponent } from './chat/chat';
+import { DocumentQueryComponent } from './document-query/document-query';
+import { DocumentAddComponent } from './document-add/document-add';
 
 export const routes: Routes = [
   {
@@ -22,15 +24,18 @@ export const routes: Routes = [
     component: Layout,
     canActivate: [authGuard],
     children: [
-      { path: 'customer-form', component: CustomerFormComponent },
-      { path: 'customer-list', component: CustomerListComponent },
-      { path: '', redirectTo: 'customer-list', pathMatch: 'full' },
-      { path: 'order-list', component: OrderListComponent },
-      { path: 'order-form', component: OrderFormComponent, canDeactivate: [canDeactivateGuard] },
-      { path: 'order-form/:id', component: OrderFormComponent },
-      { path: 'order-detail/:id', component: OrderDetailComponent },
-      { path: 'product-form', component: ProductRegistryComponent },
+      // { path: 'customer-form', component: CustomerFormComponent },
+      // { path: 'customer-list', component: CustomerListComponent },
+      // { path: '', redirectTo: 'customer-list', pathMatch: 'full' },
+      // { path: 'order-list', component: OrderListComponent },
+      // { path: 'order-form', component: OrderFormComponent, canDeactivate: [canDeactivateGuard] },
+      // { path: 'order-form/:id', component: OrderFormComponent },
+      // { path: 'order-detail/:id', component: OrderDetailComponent },
+      // { path: 'product-form', component: ProductRegistryComponent },
       { path: 'chat', component: ChatComponent },
+      { path: 'documnetQuery', component: DocumentQueryComponent },
+      { path: 'document-add', component: DocumentAddComponent },
+
       { path: '**', redirectTo: 'login' },
     ],
   },

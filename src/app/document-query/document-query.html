@@ -1,0 +1,77 @@
+<!-- document-query/document-query.component.html -->
+<div class="document-query-page">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Ask a Question</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Source filter</mat-label>
+        <input
+          matInput
+          [(ngModel)]="querySource"
+          name="querySource"
+          placeholder="e.g. policy.pdf"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Your question</mat-label>
+        <input
+          matInput
+          [(ngModel)]="queryText"
+          name="queryText"
+          placeholder="What does the document say about..."
+          (keyup.enter)="onQuery()"
+        />
+      </mat-form-field>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="onQuery()"
+        [disabled]="store.isQuerying() || !queryText.trim() || !querySource.trim()"
+      >
+        @if (store.isQuerying()) {
+          <mat-spinner diameter="18" class="inline-spinner"></mat-spinner>
+        } @else {
+          Ask
+        }
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <div class="qa-history">
+    @for (entry of store.qaHistory(); track entry.id) {
+      <mat-card appearance="outlined" class="qa-entry">
+        <mat-card-content>
+          <div class="qa-question">
+            <mat-icon>help_outline</mat-icon>
+            <span>{{ entry.query }}</span>
+          </div>
+          <mat-divider class="qa-divider"></mat-divider>
+
+          @if (entry.loading) {
+            <div class="qa-loading">
+              <mat-spinner diameter="20"></mat-spinner>
+              <span>Thinking...</span>
+            </div>
+          } @else if (entry.error) {
+            <p class="error-text">{{ entry.error }}</p>
+          } @else {
+            <p class="qa-answer">{{ entry.answer }}</p>
+          }
+
+          <mat-chip-set class="source-chip">
+            <mat-chip>{{ entry.source }}</mat-chip>
+          </mat-chip-set>
+        </mat-card-content>
+      </mat-card>
+    } @empty {
+      <p class="empty-state">No questions asked yet.</p>
+    }
+  </div>
+</div>

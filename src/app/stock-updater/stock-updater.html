@@ -1,0 +1,22 @@
+<!-- stock-ticker.component.html -->
+<div class="stock-card">
+  @if (quote(); as q) {
+    <div class="symbol">{{ q.value.symbol }}</div>
+    <div class="price">₹{{ q.value.price | number: '1.2-2' }}</div>
+    <div
+      class="change"
+      [class.positive]="q.value.change >= 0"
+      [class.negative]="q.value.change < 0"
+    >
+      {{ q.value.change >= 0 ? '+' : '' }}{{ q.value.change | number: '1.2-2' }} ({{
+        q.value.changePercent | number: '1.2-2'
+      }}%)
+    </div>
+    <div class="timestamp">Updated: {{ q.timestamp | date: 'mediumTime' }}</div>
+    <div class="market-status" [class.open]="q.value.isMarketOpen">
+      {{ q.value.isMarketOpen ? '● Market Open' : '○ Market Closed' }}
+    </div>
+  } @else {
+    <div>Connecting...</div>
+  }
+</div>

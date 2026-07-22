@@ -36,7 +36,7 @@ import { ViewChild } from '@angular/core';
   styleUrls: ['./layout.css'],
 })
 export class Layout implements OnInit {
-  title = signal('OrderManagement');
+  title = signal('Document Ai Management');
 
   constructor(
     private orderState: OrderStore,
@@ -44,10 +44,10 @@ export class Layout implements OnInit {
     private authService: AuthService,
     private router: Router,
   ) {
-    effect(() => {
-      this.customerState.loadCustomers();
-      this.orderState.loadOrders();
-    });
+    // effect(() => {
+    //   this.customerState.loadCustomers();
+    //   this.orderState.loadOrders();
+    // });
   }
 
   @ViewChild('sidenav') sidenav!: MatSidenav;

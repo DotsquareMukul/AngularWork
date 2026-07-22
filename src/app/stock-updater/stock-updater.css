@@ -1,0 +1,48 @@
+.stock-card {
+  padding: 16px;
+  display: flex;
+  border-radius: 8px;
+  background: #f5f5f5;
+  text-align: center;
+  min-width: 200px;
+}
+
+.symbol {
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+}
+
+.price {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.change {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.change.positive {
+  color: #2e7d32;
+}
+
+.change.negative {
+  color: #c62828;
+}
+
+.timestamp {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.5);
+  margin-top: 8px;
+}
+.market-status {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.market-status.open {
+  color: #2e7d32;
+  font-weight: 500;
+}

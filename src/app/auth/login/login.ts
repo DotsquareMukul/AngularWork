@@ -53,6 +53,6 @@ export class Login {
     console.log(this.loginForm.value);
     this.authService.logIn();
 
-    this.router.navigate(['/customer-list']);
+    this.router.navigate(['/chat']);
   }
 }

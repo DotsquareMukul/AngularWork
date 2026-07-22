@@ -69,3 +69,7 @@ mat-form-field {
 .signup-prompt a:hover {
   text-decoration: underline;
 }
+input[type='password']::-ms-reveal,
+input[type='password']::-ms-clear {
+  display: none;
+}

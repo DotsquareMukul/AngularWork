@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { ChatChunk } from '../models/chat.model';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
@@ -10,15 +11,19 @@ export class ChatService {
    * Example real implementation using fetch + ReadableStream or EventSource
    * shown below in sendMessage().
    */
+
+  private readonly baseUrl = environment.aiBaseUrl;
   sendMessage(
     prompt: string,
     messageId: string,
     history: { role: string; content: string }[] = [],
   ): Observable<ChatChunk> {
     return new Observable<ChatChunk>((subscriber) => {
+      console.log(history);
       const historyParam = encodeURIComponent(JSON.stringify(history));
+
       const eventSource = new EventSource(
-        `http://localhost:5001/api/chat/stream?prompt=${encodeURIComponent(prompt)}&history=${historyParam}`,
+        `${this.baseUrl}/chat/stream?prompt=${encodeURIComponent(prompt)}&history=${historyParam}`,
       );
 
       eventSource.onmessage = (event) => {
