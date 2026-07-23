@@ -19,22 +19,45 @@
   </div>
 
   <div class="chat-input-row">
+    <input
+      #fileInput
+      type="file"
+      accept="application/pdf"
+      hidden
+      (change)="onFileSelected($event)"
+    />
+    @if (store.attachedFile(); as file) {
+      <div class="file-chip">
+        📎 {{ file.name }}
+        <button (click)="store.clearAttachedFile()">✕</button>
+      </div>
+    }
+    @if (store.isUploadingFile()) {
+      <span>Uploading PDF...</span>
+    }
     <mat-form-field appearance="outline" class="chat-input">
+      <button
+        mat-icon-button
+        matPrefix
+        matTooltip="Attach PDF"
+        type="button"
+        (click)="triggerFilePicker()"
+        [disabled]="isStreaming()"
+      >
+        <mat-icon>attach_file</mat-icon>
+      </button>
+
       <input
         matInput
-        placeholder="Type a message..."
+        placeholder="Type a message or attach a PDF..."
         [ngModel]="draft()"
         (ngModelChange)="draft.set($event)"
         (keydown)="onEnter($event)"
         [disabled]="isStreaming()"
       />
     </mat-form-field>
-    <button
-      mat-icon-button
-      color="primary"
-      (click)="send()"
-      [disabled]="isStreaming() || !draft().trim()"
-    >
+
+    <button mat-icon-button color="primary" (click)="send()" [disabled]="isBusy() || !canSend()">
       <mat-icon>send</mat-icon>
     </button>
   </div>
