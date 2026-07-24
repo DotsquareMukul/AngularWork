@@ -63,3 +63,47 @@
 .success-hint {
   color: #2e7d32;
 }
+.file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.file-chip span,
+.file-chip {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px 4px 12px;
+  background-color: #e3f2fd;
+  color: #1565c0;
+  border: 1px solid #90caf9;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  max-width: 220px;
+  line-height: 1.4;
+}
+
+.file-chip mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  color: #1565c0;
+  border-radius: 50%;
+  padding: 2px;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.file-chip mat-icon:hover {
+  background-color: #1565c0;
+  color: #ffffff;
+}

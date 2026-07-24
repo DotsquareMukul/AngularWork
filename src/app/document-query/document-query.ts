@@ -11,6 +11,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { DocumentStore } from '../store/document.store';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-document-query',
@@ -25,6 +26,7 @@ import { DocumentStore } from '../store/document.store';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatIconModule,
+    MatSelectModule,
     MatDividerModule,
   ],
   templateUrl: './document-query.html',
@@ -40,5 +42,8 @@ export class DocumentQueryComponent {
     if (!this.queryText.trim() || !this.querySource.trim()) return;
     this.store.queryDocuments(this.queryText.trim(), this.querySource.trim());
     this.queryText = '';
+  }
+  ngOnInit() {
+    this.store.fetchMetadata();
   }
 }

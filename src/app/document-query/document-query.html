@@ -8,12 +8,12 @@
     <mat-card-content>
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Source filter</mat-label>
-        <input
-          matInput
-          [(ngModel)]="querySource"
-          name="querySource"
-          placeholder="e.g. policy.pdf"
-        />
+        <mat-select [(ngModel)]="querySource" name="querySource">
+          <mat-option [value]="null">All sources</mat-option>
+          @for (source of store.sources(); track source) {
+            <mat-option [value]="source">{{ source }}</mat-option>
+          }
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">

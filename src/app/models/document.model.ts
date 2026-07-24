@@ -33,6 +33,30 @@ export interface DocumentRequest {
     [key: string]: unknown;
   };
 }
+// models/document.model.ts
+export interface DocumentMetadata {
+  source: string;
+  title?: string;
+  total_pages?: number;
+  keywords?: string;
+  producer?: string;
+  author?: string;
+  trapped?: string;
+  subject?: string;
+  creator?: string;
+  moddate?: string;
+  page?: number;
+  page_label?: string;
+  creationdate?: string;
+  video_id?: string;
+  type?: string;
+}
+
+export interface DocumentMetadataResponse {
+  success: boolean;
+  count: number;
+  metadata: DocumentMetadata[];
+}
 
 export interface AddDocumentResponse {
   message: string;

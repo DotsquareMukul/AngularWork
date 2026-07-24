@@ -26,16 +26,17 @@
       hidden
       (change)="onFileSelected($event)"
     />
-    @if (store.attachedFile(); as file) {
-      <div class="file-chip">
-        📎 {{ file.name }}
-        <button (click)="store.clearAttachedFile()">✕</button>
-      </div>
-    }
-    @if (store.isUploadingFile()) {
-      <span>Uploading PDF...</span>
-    }
+
     <mat-form-field appearance="outline" class="chat-input">
+      @if (store.attachedFile(); as file) {
+        <div class="file-chip">
+          <span class="file-name">{{ file.name }}</span>
+          <mat-icon (click)="store.clearAttachedFile()">close</mat-icon>
+        </div>
+      }
+      @if (store.isUploadingFile()) {
+        <mat-spinner diameter="16"></mat-spinner>
+      }
       <button
         mat-icon-button
         matPrefix

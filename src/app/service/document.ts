@@ -4,6 +4,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   AddDocumentResponse,
+  DocumentMetadataResponse,
   DocumentRequest,
   QueryRequest,
   QueryResponse,
@@ -31,5 +32,8 @@ export class DocumentService {
   }
   addYoutubeTranscript(request: TranscriptRequest): Observable<TranscriptResponse> {
     return this.http.post<TranscriptResponse>(`${this.baseUrl}/youtube/transcript`, request);
+  }
+  getMetadata(): Observable<DocumentMetadataResponse> {
+    return this.http.get<DocumentMetadataResponse>(`${this.baseUrl}/documents/metadata`);
   }
 }

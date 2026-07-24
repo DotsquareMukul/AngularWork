@@ -69,4 +69,9 @@ export class DocumentAddComponent {
     this.selectedFile = null;
     this.fileInput.nativeElement.value = ''; // allow re-selecting the same file later
   }
+
+  ngOnDestroy() {
+    this.store.cleanUploadMessage();
+    this.store.cleanYoutubeMessage();
+  }
 }
